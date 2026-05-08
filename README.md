@@ -8,12 +8,12 @@ Projeto Fase 1 do MLET10 da FIAP
 
 # To-Do
 
-[] Repositório GitHub criado
-    []Estrutura organizada: src/, data/, models/, tests/, notebooks/, docs/
-    []README.md completo descrição do projeto
-    []pyproject.toml como single source of truth (dependências, linting, pytest).
-    []Histórico de commits limpo e significativo (não 1 commit gigante)
-    [].gitignore adequado para projetos de ML
+[ ] Repositório GitHub criado
+    [ ]Estrutura organizada: src/, data/, models/, tests/, notebooks/, docs/
+    [ ]README.md completo descrição do projeto
+    [ ]pyproject.toml como single source of truth (dependências, linting, pytest).
+    [ ]Histórico de commits limpo e significativo (não 1 commit gigante)
+    [ ].gitignore adequado para projetos de ML
 [] Video de 5 minutos
 [] Deploy em ambiente de produção
 
