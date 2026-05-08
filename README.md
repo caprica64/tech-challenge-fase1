@@ -22,7 +22,7 @@ Tech Challenge Fase 1 do MLET10 da FIAP
 [ ] Video de 5 minutos
 [ ] Deploy em ambiente de produção
 
-##Bibliotecas Requeridas
+## Bibliotecas Requeridas
 
     [ ] PyTorch — construção e treinamento da rede neural (MLP).
     [ ] Scikit-Learn — pipelines de pré-processamento e modelos baseline.
