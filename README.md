@@ -24,6 +24,9 @@ Tech Challenge Fase 1 do MLET10 da FIAP
 
 ## Bibliotecas Requeridas
 
+    - [X] README.md completo descrição do projeto
+    - [ ] README.md completo descrição do projeto
+
     - [ ] PyTorch — construção e treinamento da rede neural (MLP).
     - [ ] Scikit-Learn — pipelines de pré-processamento e modelos baseline.
     - [ ] MLflow — tracking de experimentos (parâmetros, métricas, artefatos).
