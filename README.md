@@ -40,9 +40,9 @@ Tech Challenge Fase 1 do MLET10 da FIAP
 - [ ] Logging estruturado (sem print()).
 - [ ] Linting com ruff sem erros.
 
-## Etapa 1
+## Etapa 1 — Entendimento e Preparação (Disciplinas 01 e 02)
 
-Foco: formulação do problema, exploração de dados e construção de baselines.
+**Foco**: formulação do problema, exploração de dados e construção de baselines.
 
 - [ ] Preencher ML Canvas (stakeholders, métricas de negócio, SLOs) [Ciclo de Vida, Aula 01]
 - [ ] EDA completa: volume, qualidade, distribuição, data readiness [Ciclo de Vida, Aula 01]
@@ -53,7 +53,16 @@ Foco: formulação do problema, exploração de dados e construção de baseline
 **Entregável**: notebook de EDA + baselines registrados no MLflow.
 
 
-## Etapa 2
+## Etapa 2 — Modelagem com Redes Neurais (Disciplina 02)
 
-- [ ] Task 1
-- [ ] Task 2
+**Foco**: Construção, treinamento e avaliação de MLP com PyTorch.
+
+- [ ] Construir MLP em PyTorch: definir arquitetura, função de ativação, loss function. [Fundamentos, Aula 04]
+- [ ] Implementar loop de treinamento com early stopping e batching. [Fundamentos, Aula 04]
+- [ ] Comparar MLP vs. baselines (lineares + árvores) usando ≥ 4 métricas. [Fundamentos, Aula 05]
+- [ ] Analisar trade-off de custo (falso positivo vs. negativo). [Fundamentos, Aula 05]
+- [ ] Registrar todos os experimentos (MLP e ensembles) no MLflow. [Ciclo de Vida, Aula 02]
+
+**Entregável**: tabela comparativa de modelos + MLP treinado + artefatos no MLflow.
+
+
