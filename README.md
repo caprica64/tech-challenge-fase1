@@ -20,7 +20,6 @@ Tech Challenge Fase 1 do MLET10 da FIAP
     - [ ] .gitignore adequado para projetos de ML
 
 - [ ] Video de 5 minutos
-
 - [ ] Deploy em ambiente de produção
 
 ## Bibliotecas Requeridas
