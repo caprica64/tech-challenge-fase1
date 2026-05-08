@@ -65,4 +65,19 @@ Tech Challenge Fase 1 do MLET10 da FIAP
 
 **Entregável**: tabela comparativa de modelos + MLP treinado + artefatos no MLflow.
 
+## Etapa 3 — Engenharia e API (Disciplinas 03, 04 e 05)
+
+**Foco**: refatoração profissional, API de inferência e pacote reutilizável.
+
+Refatorar código em módulos (src/) com estrutura limpa. [Eng. Software, Aula 01]
+Criar pipeline reprodutível (sklearn + transformadores custom). [Eng. Software, Aula 01; Bibliotecas, Aula 02]
+Escrever testes (pytest): unitários, schema (pandera), smoke test. [Eng. Software, Aula 03]
+Construir API FastAPI: /predict, /health, validação Pydantic. [APIs, Aulas 01–03]
+Adicionar logging estruturado e middleware de latência. [APIs, Aula 04]
+Configurar pyproject.toml, ruff, Makefile (lint, test, run). [Eng. Software, Aulas 04–05]
+
+**Entregável**: repositório refatorado + API funcional + testes passando.
+
+## Etapa 4 — Documentação e Entrega Final (Todas as disciplinas)
+
 
