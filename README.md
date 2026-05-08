@@ -29,6 +29,15 @@ Tech Challenge Fase 1 do MLET10 da FIAP
     [ ] MLflow — tracking de experimentos (parâmetros, métricas, artefatos).
     [ ] FastAPI — API de inferência do modelo.
 
+## Boas Práticas Obrigatórias
+
+    [ ] Seeds fixados para reprodutibilidade.
+    [ ] Validação cruzada estratificada.
+    [ ] Model Card documentando limitações e vieses.
+    [ ] Testes automatizados (≥ 3: smoke test, schema, API).
+    [ ] Logging estruturado (sem print()).
+    [ ] Linting com ruff sem erros.
+
 ## Etapa 1
 
 [ ] Task 1
