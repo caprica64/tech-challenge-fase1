@@ -48,4 +48,4 @@ Tech Challenge Fase 1 do MLET10 da FIAP
 
 [ ] Task 1
 
-[ ] Task 2
+[  ] Task 2
