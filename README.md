@@ -45,9 +45,12 @@ Tech Challenge Fase 1 do MLET10 da FIAP
 Foco: formulação do problema, exploração de dados e construção de baselines.
 
 - [ ] Preencher ML Canvas (stakeholders, métricas de negócio, SLOs) [Ciclo de Vida, Aula 01]
-- [ ] EDA completa: volume, qualidade, distribuição, data readiness | Ciclo de Vida, Aula 01
+- [ ] EDA completa: volume, qualidade, distribuição, data readiness [Ciclo de Vida, Aula 01]
+- [ ] Definir métrica técnica (AUC-ROC, PR-AUC, F1) e métrica de negócio (custo de churn evitado) [Fundamentos, Aula 05]
+- [ ] Treinar baseline com DummyClassifier e Regressão Logística (Scikit-Learn) [Fundamentos, Aulas 01–02]
+- [ ] Registrar experimentos no MLflow (parâmetros, métricas, dataset version) [Ciclo de Vida, Aula 02]
 
-
+**Entregável**: notebook de EDA + baselines registrados no MLflow.
 
 
 ## Etapa 2
