@@ -42,8 +42,12 @@ Tech Challenge Fase 1 do MLET10 da FIAP
 
 ## Etapa 1
 
-- [X] Task 1
+Foco: formulação do problema, exploração de dados e construção de baselines.
+
+- [ ] Preencher ML Canvas (stakeholders, métricas de negócio, SLOs)
 - [ ] Task 2
+
+
 
 ## Etapa 2
 
