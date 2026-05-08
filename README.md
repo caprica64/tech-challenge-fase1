@@ -11,7 +11,7 @@ Tech Challenge Fase 1 do MLET10 da FIAP
 
 # To-Do
 
-- [O] Repositório GitHub criado
+- [ ] Repositório GitHub criado
 
     - [ ] Estrutura organizada: src/, data/, models/, tests/, notebooks/, docs/
     - [X] README.md completo descrição do projeto
@@ -24,10 +24,10 @@ Tech Challenge Fase 1 do MLET10 da FIAP
 
 ## Bibliotecas Requeridas
 
-    - [ ] PyTorch — construção e treinamento da rede neural (MLP).
-    - [ ] Scikit-Learn — pipelines de pré-processamento e modelos baseline.
-    - [ ] MLflow — tracking de experimentos (parâmetros, métricas, artefatos).
-    - [ ] FastAPI — API de inferência do modelo.
+- [ ] PyTorch — construção e treinamento da rede neural (MLP).
+- [ ] Scikit-Learn — pipelines de pré-processamento e modelos baseline.
+- [ ] MLflow — tracking de experimentos (parâmetros, métricas, artefatos).
+- [ ] FastAPI — API de inferência do modelo.
 
 ## Boas Práticas Obrigatórias
 
