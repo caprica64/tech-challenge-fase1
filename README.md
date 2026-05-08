@@ -1,23 +1,33 @@
 # fiap-mlet10-fase1
-Projeto Fase 1 do MLET10 da FIAP
+Tech Challenge Fase 1 do MLET10 da FIAP
 
 
 # Objetivo do projeto
 
 # Estrutura do projeto
 
+# Instruções
+
+
 # To-Do
 
-[ ] Repositório GitHub criado
+[O] Repositório GitHub criado
 
     [ ]Estrutura organizada: src/, data/, models/, tests/, notebooks/, docs/
     [X]README.md completo descrição do projeto
-    [ ]pyproject.toml como single source of truth (dependências, linting, pytest).    
+    [ ]pyproject.toml como single source of truth (dependências, linting, pytest)
     [ ]Histórico de commits limpo e significativo (não 1 commit gigante)    
     [ ].gitignore adequado para projetos de ML
 
 [ ] Video de 5 minutos
 [ ] Deploy em ambiente de produção
+
+##Bibliotecas Requeridas
+
+    [ ] PyTorch — construção e treinamento da rede neural (MLP).
+    [ ] Scikit-Learn — pipelines de pré-processamento e modelos baseline.
+    [ ] MLflow — tracking de experimentos (parâmetros, métricas, artefatos).
+    [ ] FastAPI — API de inferência do modelo.
 
 ## Etapa 1
 
