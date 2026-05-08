@@ -44,8 +44,9 @@ Tech Challenge Fase 1 do MLET10 da FIAP
 
 Foco: formulação do problema, exploração de dados e construção de baselines.
 
-- [ ] Preencher ML Canvas (stakeholders, métricas de negócio, SLOs)
-- [ ] Task 2
+- [ ] Preencher ML Canvas (stakeholders, métricas de negócio, SLOs) | Ciclo de Vida, Aula 01
+- [ ] EDA completa: volume, qualidade, distribuição, data readiness | Ciclo de Vida, Aula 01
+
 
 
 
