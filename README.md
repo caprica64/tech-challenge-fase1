@@ -22,7 +22,7 @@ Tech Challenge Fase 1 do MLET10 da FIAP
 - [ ] Video de 5 minutos
 - [ ] Deploy em ambiente de produção
 
-# Bibliotecas Requeridas
+- [ ] Bibliotecas Requeridas
 
     - [X] README.md completo descrição do projeto
     - [ ] README.md completo descrição do projeto
