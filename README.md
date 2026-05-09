@@ -21,6 +21,17 @@ Esses são os passos para implementar o modelo...
 
 # To-Do
 
+Passo a Passo Resumido
+
+• [Etapa 1] EDA + ML Canvas + Baselines → MLflow tracking.
+
+• [Etapa 2] MLP PyTorch + comparação de modelos + análise de custo.
+
+• [Etapa 3] Refatoração + API FastAPI + testes + Makefile.
+
+• [Etapa 4] Model Card + README + vídeo STAR + (opcional) deploy em nuvem.
+
+
 ## Repositório GitHub criado
 
 - [ ] Estrutura organizada: src/, data/, models/, tests/, notebooks/, docs/
