@@ -5,7 +5,12 @@ Projeto de Machine Learning baseado nos princípios de Business Understanding e 
 
 1. **Problema de Negócio**
 
-A FIAPMobile enfrenta uma alta taxa de cancelamento de clientes (churn), impactando receita recorrente, previsibilidade financeira e aumentando custos de aquisição.
+A Earthcom identificou uma alta taxa de cancelamento de clientes (churn) nos dois últimos trimestres impactando de maneira inesperada. As razões ainda são desconhecidas e para planejarem planos de ação e recuperação é necessário explorar a fundo o tem levado os clientes ao cancelamento.
+
+O board determinou a criação de uma força tarefa inter-departamental para estudar quais razões levam aos cancelamentos e identificar oportunidades de melhorias.
+
+Esta força tarefa é composta por representantes das áreas de atendimento ao cliente (inclui suporte técnico, instalação e retenção de clientes),infraestrutura, operações técnicas de campo, marketing, vendas e finanças.
+
 
 2. **Objetivo de Negócio**
 
