@@ -5,7 +5,7 @@ Projeto de Machine Learning baseado nos princípios de Business Understanding e 
 
 1. **Problema de Negócio**
 
-A Earthcom identificou uma alta taxa de cancelamento de clientes (churn) nos dois últimos trimestres impactando de maneira inesperada. As razões ainda são desconhecidas e para planejarem planos de ação e recuperação é necessário explorar a fundo o tem levado os clientes ao cancelamento.
+A Calcom identificou uma alta taxa de cancelamento de clientes (churn) nos dois últimos trimestres impactando de maneira inesperada. As razões ainda são desconhecidas e para planejarem planos de ação e recuperação é necessário explorar a fundo o tem levado os clientes ao cancelamento.
 
 O board determinou a criação de uma força tarefa inter-departamental para estudar quais razões levam aos cancelamentos e identificar oportunidades de melhorias.
 
@@ -20,13 +20,9 @@ Reduzir o churn trimestral em **15%**, identificando clientes com alta probabili
 
 **KPI Principal**
 
-- Taxa de churn mensal/trimestral
+- Taxa de churn trimestral
 
-**KPIs Secundários**
 
-- Taxa de retenção pós-campanha
-- Redução do CAC
-- Aumento do LTV (Lifetime Value)
 4. **Objetivo Técnico (Data Science)**
 - Construir um modelo de **classificação binária** para prever churn (0/1).
 - Métricas técnicas mínimas:
