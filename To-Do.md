@@ -13,11 +13,11 @@ Passo a Passo Resumido
 
 ## Repositório GitHub criado
 
-- [ ] Estrutura organizada: src/, data/, models/, tests/, notebooks/, docs/
+- [X] Estrutura organizada: src/, data/, models/, tests/, notebooks/, docs/
 - [X] README.md completo descrição do projeto
 - [ ] pyproject.toml como single source of truth (dependências, linting, pytest)
 - [ ] Histórico de commits limpo e significativo (não 1 commit gigante)    
-- [ ] .gitignore adequado para projetos de ML
+- [X] .gitignore adequado para projetos de ML
 
 ## Video & Deploy
 
@@ -33,7 +33,7 @@ Passo a Passo Resumido
 
 ## Boas Práticas Obrigatórias
 
-- [ ] Seeds fixados para reprodutibilidade.
+- [X] Seeds fixados para reprodutibilidade.
 - [ ] Validação cruzada estratificada.
 - [ ] Model Card documentando limitações e vieses.
 - [ ] Testes automatizados (≥ 3: smoke test, schema, API).
@@ -44,10 +44,10 @@ Passo a Passo Resumido
 
 **Foco**: formulação do problema, exploração de dados e construção de baselines.
 
-- [ ] Preencher ML Canvas (stakeholders, métricas de negócio, SLOs) [Ciclo de Vida, Aula 01]
-- [ ] EDA completa: volume, qualidade, distribuição, data readiness [Ciclo de Vida, Aula 01]
+- [O] Preencher ML Canvas (stakeholders, métricas de negócio, SLOs) [Ciclo de Vida, Aula 01]
+- [X] EDA completa: volume, qualidade, distribuição, data readiness [Ciclo de Vida, Aula 01]
 - [ ] Definir métrica técnica (AUC-ROC, PR-AUC, F1) e métrica de negócio (custo de churn evitado) [Fundamentos, Aula 05]
-- [ ] Treinar baseline com DummyClassifier e Regressão Logística (Scikit-Learn) [Fundamentos, Aulas 01–02]
+- [X] Treinar baseline com DummyClassifier e Regressão Logística (Scikit-Learn) [Fundamentos, Aulas 01–02]
 - [ ] Registrar experimentos no MLflow (parâmetros, métricas, dataset version) [Ciclo de Vida, Aula 02]
 
 **Entregável**: notebook de EDA + baselines registrados no MLflow.
