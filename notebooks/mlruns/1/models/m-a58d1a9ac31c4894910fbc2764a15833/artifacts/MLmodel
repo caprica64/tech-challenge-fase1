@@ -1,0 +1,23 @@
+artifact_path: /Users/rodrigo/Desktop/FIAP/Fase1/tech-challenge-fase1/notebooks/mlruns/1/models/m-a58d1a9ac31c4894910fbc2764a15833/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.7
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.5.1
+    skops_trusted_types: null
+mlflow_version: 3.12.0
+model_id: m-a58d1a9ac31c4894910fbc2764a15833
+model_size_bytes: 2853
+model_uuid: m-a58d1a9ac31c4894910fbc2764a15833
+prompts: null
+run_id: 618ef508cdd245b08781dc2965883501
+utc_time_created: '2026-05-13 20:34:00.350905'
