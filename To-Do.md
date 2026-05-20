@@ -15,7 +15,7 @@ Passo a Passo Resumido
 
 - [X] Estrutura organizada: src/, data/, models/, tests/, notebooks/, docs/
 - [X] README.md completo descrição do projeto
-- [ ] pyproject.toml como single source of truth (dependências, linting, pytest)
+- [O] pyproject.toml como single source of truth (dependências, linting, pytest)
 - [ ] Histórico de commits limpo e significativo (não 1 commit gigante)    
 - [X] .gitignore adequado para projetos de ML
 

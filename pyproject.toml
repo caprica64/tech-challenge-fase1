@@ -1,0 +1,15 @@
+[project]
+# dynamic = ["version"]
+requires-python = ">= 3.12"
+name = "previsao-de-churn-california"
+version = "2026.5.0a1"
+
+authors = [
+  {name = "Rodrigo Monteiro", email = "monteiro8ro@gmail.com"},
+  {name = "Tzu-Ping Chung", email = "tzu-ping@example.com"},
+  {name = "Another person"},
+  {email = "different.person@example.com"},
+]
+maintainers = [
+  {name = "Brett Cannon", email = "brett@example.com"}
+]
