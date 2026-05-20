@@ -16,7 +16,7 @@ Passo a Passo Resumido
 - [X] Estrutura organizada: src/, data/, models/, tests/, notebooks/, docs/
 - [X] README.md completo descrição do projeto
 - [O] pyproject.toml como single source of truth (dependências, linting, pytest)
-- [ ] Histórico de commits limpo e significativo (não 1 commit gigante)    
+- [O] Histórico de commits limpo e significativo (não 1 commit gigante)    
 - [X] .gitignore adequado para projetos de ML
 
 ## Video & Deploy
@@ -70,11 +70,11 @@ Passo a Passo Resumido
 **Foco**: refatoração profissional, API de inferência e pacote reutilizável.
 
 - [ ] Refatorar código em módulos (src/) com estrutura limpa. [Eng. Software, Aula 01]
-- [ ] Criar pipeline reprodutível (sklearn + transformadores custom). [Eng. Software, Aula 01; Bibliotecas, Aula 02]
+- [O] Criar pipeline reprodutível (sklearn + transformadores custom). [Eng. Software, Aula 01; Bibliotecas, Aula 02]
 - [ ] Escrever testes (pytest): unitários, schema (pandera), smoke test. [Eng. Software, Aula 03]
-C- [ ] onstruir API FastAPI: /predict, /health, validação Pydantic. [APIs, Aulas 01–03]
+- [ ] Construir API FastAPI: /predict, /health, validação Pydantic. [APIs, Aulas 01–03]
 - [ ] Adicionar logging estruturado e middleware de latência. [APIs, Aula 04]
-C- [ ] onfigurar pyproject.toml, ruff, Makefile (lint, test, run). [Eng. Software, Aulas 04–05]
+- [O] Configurar pyproject.toml, ruff, Makefile (lint, test, run). [Eng. Software, Aulas 04–05]
 
 **Entregável**: repositório refatorado + API funcional + testes passando.
 
