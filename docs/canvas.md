@@ -1,210 +1,54 @@
+# 📃 ML Canvas: Churn
 
-# ML Canvas — Previsão de Churn em Telecom
+[cite_start]Neste documento apresentamos a formulação do problema focada nos conceitos de _"Business Understanding"_ e _"Data Understanding"_ para o Tech Challenge[cite: 1, 2, 41]. [cite_start]O modelo preditivo (Rede Neural MLP) estima a probabilidade de um cliente efetuar o cancelamento [cite: 11, 13][cite_start], mapeando-o em réguas de acionamento baseadas em risco e impacto financeiro direto na receita mensal (Monthly Charges)[cite: 71, 72].
 
-Projeto de Machine Learning baseado nos princípios de Business Understanding e Data Understanding descritos no material da aula.
+##  Qual problema queremos resolver?
+[cite_start]Desacelerar a perda de clientes e mitigar a evasão de receita recorrente mensal (MRR) na operadora de telecomunicações [cite: 10][cite_start], identificando clientes com alta probabilidade de cancelamento antes que encerrem seus contratos[cite: 11].
 
-1. **Problema de Negócio**
+##  Métricas do negócio que consideraremos para a resolução do problema
+Como o modelo estima a probabilidade de churn baseada no comportamento atual de faturamento e serviços, avaliaremos o impacto financeiro real utilizando:
 
-A Calcom identificou uma alta taxa de cancelamento de clientes (churn) nos dois últimos trimestres impactando de maneira inesperada. As razões ainda são desconhecidas e para planejarem planos de ação e recuperação é necessário explorar a fundo o tem levado os clientes ao cancelamento.
+- **MRR em Risco Protegido (MRR-RP):** O volume de faturamento mensal (`MonthlyCharges`) dos clientes classificados nas faixas de maior risco que permaneceram ativos após a janela de corte de 90 dias pós-intervenção.
 
-O board determinou a criação de uma força tarefa inter-departamental para estudar quais razões levam aos cancelamentos e identificar oportunidades de melhorias.
+$$\text{MRR-RP} = \sum_{i \in \text{Tratados Ativos}} \text{MonthlyCharges}_i$$
 
-Esta força tarefa é composta por representantes das áreas de atendimento ao cliente (inclui suporte técnico, instalação e retenção de clientes),infraestrutura, operações técnicas de campo, marketing, vendas e finanças.
+- **ARPU Preservation Rate (APR):** Taxa de controle para monitorar se os descontos concedidos pelo time de retenção não estão corroendo a Receita Média por Usuário (ARPU) de forma predatória.
 
+##  O que queremos atingir
+- Mapear e acionar proativamente os clientes que concentram a maior fatia de receita em risco, buscando reter pelo menos **80% do MRR total** do grupo identificado com propensão ao churn.
+- Garantir que o custo total das ações de retenção (ex: concessão de descontos em faturas) não ultrapasse **15% do valor do MRR salvo** no trimestre subsequente.
 
-2. **Objetivo de Negócio**
+##  O que atingimos
+[cite_start]*(Espaço em branco reservado para os resultados pós-treinamento da MLP em PyTorch e validação do modelo)* [cite: 28, 48]
 
-Reduzir o churn trimestral em **15%**, identificando clientes com alta probabilidade de cancelamento para ações preventivas.
+##  O que faremos com essa informação?
+[cite_start]A camada de saída do modelo (Rede Neural MLP com ativação Sigmoide) retornará a **Probabilidade de Churn ($P(\text{churn})$)** de cada cliente[cite: 13, 28]. O pipeline categorizará os clientes em **Faixas de Risco** para que as equipes de CRM e Marketing possam direcionar ações diretamente no ecossistema de dados disponível:
 
+**Fluxo de Risco e Ações Transicionais:**
+- **$P(\text{churn}) \ge 80\%$ [Risco Crítico]:** Direcionamento para atendimento prioritário e ofertas agressivas de renovação de contrato (fidelização), focado em clientes com alto `MonthlyCharges`.
+- **$50\% \le P(\text{churn}) < 80\%$ [Risco Alto]:** Disparo de campanhas automatizadas de engajamento via canais digitais (E-mail/SMS), oferecendo vantagens nos serviços de valor agregado que o cliente ainda não possui contratado.
+- **$P(\text{churn}) < 50\%$ [Risco Monitorado]:** Clientes permanecem nas réguas de comunicação padrão da companhia.
 
-3. **KPIs (Indicadores de Sucesso)**
+##  Como atestar a assertividade das ações tomadas a partir do modelo?
+As ações de retenção serão validadas através de um design de teste com grupo de controle isolado:
+- **Grupo tratado:** Clientes com probabilidade de churn acima do threshold que **recebem** a oferta ou abordagem de retenção.
+- **Grupo controle (Holdout):** Clientes com o mesmo perfil de risco elevado que **não recebem** nenhuma ação (mantidos no fluxo orgânico para avaliar a taxa de churn base).
 
-**KPI Principal**
+A métrica de validação do experimento será o **Share de Churners**:
 
-- Taxa de churn trimestral
+$$\text{Share de Churners} = \frac{\text{Churners no grupo}}{\text{Total do grupo}}$$
 
+O modelo e a estratégia de negócio serão considerados eficazes se o Grupo Tratado contiver um Share de Churners significativamente menor e retiver mais receita (`TotalCharges`) do que o Grupo Controle.
 
-4. **Objetivo Técnico (Data Science)**
+##  Recursos necessários
+- [cite_start]**Base de Dados:** Dataset estruturado contendo dados demográficos, contratuais e financeiros de clientes (IBM Telco Churn Dataset)[cite: 71, 72].
+- [cite_start]**Infraestrutura em Nuvem:** Ambiente para execução dos pipelines de pré-processamento (Scikit-Learn), rastreamento de experimentos (MLflow) e exposição do modelo através de API (FastAPI)[cite: 29, 31, 32, 57].
 
-- Construir um modelo de **classificação binária** para prever churn (0/1).
-- Métricas técnicas mínimas:
-	- [ ] AUC ≥ **0,85**
-	- [ ] Recall ≥ **0,75**
-	- [ ] Precisão ≥ **0,70**
-- Entrega via API + dashboard explicativo.
-
-
-5. **Stakeholders**
-
-**Patrocinadores**
-
-- CEO
-- VP Marketing
-- VP Vendas
-- VP Operações
-- VP Finanças
-
-**Especialistas de Domínio**
-
-- Vendas: Analisa métricas do CRM
-- Atendimento ao cliente: fornecem suporte técnico, instalação e retenção de clientes
-- Operações: gerencia a infraestrutura de operações internas (rede, data center) e externa (cabeamento subterraneo, estações rádio-base)
-
-**Donos dos Dados**
-
-- Engenharia de Dados
-- Operações: TI, atendimento a clientes.
-- Vendas: times de contas B2B, B2C
-
-**Usuários Finais**
-
-- Vendas
-- Atendimento a clientes, incluindo retenção: responsável por escutar clientes, instruí-los no uso dos produtos.
-- Operaçã: responsável pelas ações de melhoria de serviço.
-
-
-6. **Requisitos do Projeto**
-
-- Seeds fixados para reprodutibilidade **42**.
-- Validação cruzada estratificada.
-- Model card documentando limitações e viéses.
-- Interpretabilidade obrigatória (ex.: SHAP).
-- Testes automatizados (>= 3: smoke test, schema e API).
-- Loggin estruturado sem print().
-- Integração com sistemas internos via API.
-- Linting com ruff sem erros.
-
-
-7. **Restrições**
-
-- Dados históricos incompletos para parte da base.
-- Sistemas legados dificultam integração em tempo real.
-- Orçamento limitado para dados externos.
-- Equipe reduzida de engenharia.
-
-
-8. **Pressupostos**
-
-- A definição de churn permanecerá estável durante o projeto.
-- A equipe de CRM fornecerá dados de campanhas anteriores.
-- A infraestrutura atual suporta treinamento e inferência.
-- Dados de cancelamento são confiáveis e atualizados.
-
-
-9. **Dados Disponíveis**
-
-**Fontes Internas**
-
-- Histórico de faturamento
-- Registros de suporte (tickets, chamadas)
-- Uso de dados, voz e SMS
-- Reclamações (SAC, Ouvidoria)
-- Plano contratado
-- Tempo como cliente
-- Pagamentos em atraso
-
-**Fontes Externas (opcionais)**
-
-- Qualidade de cobertura por região
-- Ofertas da concorrência
-- Indicadores socioeconômicos por área geográfica (latitude e longitude)
-
-
-10. **Variáveis Relevantes (Features)**
-
-**Demográficas**
-
-- Idade
-- Região
-- Sexo
-- Parceiros
-- Dependentes
-
-**Comportamentais**
-
-- Consume dados
-- Consume voz
-- Uso de backup na nuvem
-- Uso de serviços de segurança
-- Uso de streaming
-- Mudanças recentes de plano 
-
-**Históricas**
-
-- Tempo como cliente
-- Usou suporte técnico
-
-
-**Contextuais**
-
-- Cobertura na região
-- Concorrência local
-
-**Variáveis Derivadas**
-
-- Score de insatisfação
-- Variação do consumo mês a mês
-
-
-11. **Variável Alvo (Target)**
-
-- **Churn = 1**: cliente cancelou nos últimos 30 dias
-- **Churn = 0**: cliente permaneceu ativo
-
-12. **Riscos e Contingências**
-
-**Riscos**
-
-- Dados incompletos
-- Baixa adoção pelo time de retenção
-- Mudança na definição de churn
-- Possível viés do modelo
-
-**Contingências**
-
-- Estratégias de imputação
-- Treinamento dos usuários finais
-- Revisão trimestral da definição de churn
-- Auditoria de fairness
-
-
-13. **Plano de Projeto (Macro)**
-
-**Etapas (CRISP-DM)**
-
-- 1	Business Understanding — concluído
-
-- 2	Data Understanding — 
-
-- 3	Data Preparation — 
-
-- 4	Modeling — 
-
-- 5	Evaluation — 
-
-- 6	Deployment — 
-
-
-14. **Entregáveis**
-
-- Modelo preditivo de churn
-- Dashboard com scores e explicações
-- API interna
-- Documentação técnica
-- Relatório executivo
-- Plano de monitoramento
-
-
-15. **Critérios de Sucesso Final**
-
-**Sucesso Técnico**
-
-- AUC ≥ 0,85
-- Recall ≥ 0,75
-
-**Sucesso de Negócio**
-
-- Redução real do churn ≥ 15%
-- Aumento da retenção pós-campanha
-- Adoção do modelo pelas equipes
-
+##  Dados e variáveis relevantes (Data Understanding)
+A análise e as predições serão baseadas exclusivamente nas features nativas do ecossistema do dataset:
+- **`tenure`:** Quantidade de meses que o cliente está na base, refletindo a sua lealdade temporal.
+- **`MonthlyCharges`:** O valor mensal atual cobrado do cliente, que dita o impacto direto no MRR em risco.
+- **`TotalCharges`:** O montante total acumulado gasto pelo cliente na empresa.
+- **`Contract`:** O tipo de contrato atual (Mensal, Anual, Bienal) – variável crítica para entender o risco de quebra de vínculo.
+- **`PaymentMethod`:** Forma de pagamento elegida (Boleto eletrônico, Boleto enviado por correio, Débito automático, Cartão de crédito).
+- **Aderência a Serviços Técnicos/Segurança:** Flags de contratação de serviços que aumentam o *lock-in* e reduzem o churn, como `InternetService`, `OnlineSecurity`, `OnlineBackup`, `DeviceProtection` e `TechSupport`.
