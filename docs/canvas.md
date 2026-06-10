@@ -1,9 +1,9 @@
 # 📃 ML Canvas: Churn
 
-[cite_start]Neste documento apresentamos a formulação do problema focada nos conceitos de _"Business Understanding"_ e _"Data Understanding"_ para o Tech Challenge[cite: 1, 2, 41]. [cite_start]O modelo preditivo (Rede Neural MLP) estima a probabilidade de um cliente efetuar o cancelamento [cite: 11, 13][cite_start], mapeando-o em réguas de acionamento baseadas em risco e impacto financeiro direto na receita mensal (Monthly Charges)[cite: 71, 72].
+Neste documento apresentamos a formulação do problema focada nos conceitos de _"Business Understanding"_ e _"Data Understanding"_ para o Tech Challenge. O modelo preditivo (Rede Neural MLP) estima a probabilidade de um cliente efetuar o cancelamento, mapeando-o em réguas de acionamento baseadas em risco e impacto financeiro direto na receita mensal (Monthly Charges).
 
 ##  Qual problema queremos resolver?
-[cite_start]Desacelerar a perda de clientes e mitigar a evasão de receita recorrente mensal (MRR) na operadora de telecomunicações [cite: 10][cite_start], identificando clientes com alta probabilidade de cancelamento antes que encerrem seus contratos[cite: 11].
+Desacelerar a perda de clientes e mitigar a evasão de receita recorrente mensal (MRR) na operadora de telecomunicações, identificando clientes com alta probabilidade de cancelamento antes que encerrem seus contratos.
 
 ##  Métricas do negócio que consideraremos para a resolução do problema
 Como o modelo estima a probabilidade de churn baseada no comportamento atual de faturamento e serviços, avaliaremos o impacto financeiro real utilizando:
@@ -19,10 +19,10 @@ $$\text{MRR-RP} = \sum_{i \in \text{Tratados Ativos}} \text{MonthlyCharges}_i$$
 - Garantir que o custo total das ações de retenção (ex: concessão de descontos em faturas) não ultrapasse **15% do valor do MRR salvo** no trimestre subsequente.
 
 ##  O que atingimos
-[cite_start]*(Espaço em branco reservado para os resultados pós-treinamento da MLP em PyTorch e validação do modelo)* [cite: 28, 48]
+*(Espaço em branco reservado para os resultados pós-treinamento da MLP em PyTorch e validação do modelo)* 
 
 ##  O que faremos com essa informação?
-[cite_start]A camada de saída do modelo (Rede Neural MLP com ativação Sigmoide) retornará a **Probabilidade de Churn ($P(\text{churn})$)** de cada cliente[cite: 13, 28]. O pipeline categorizará os clientes em **Faixas de Risco** para que as equipes de CRM e Marketing possam direcionar ações diretamente no ecossistema de dados disponível:
+A camada de saída do modelo (Rede Neural MLP com ativação Sigmoide) retornará a **Probabilidade de Churn ($P(\text{churn})$)** de cada cliente. O pipeline categorizará os clientes em **Faixas de Risco** para que as equipes de CRM e Marketing possam direcionar ações diretamente no ecossistema de dados disponível:
 
 **Fluxo de Risco e Ações Transicionais:**
 - **$P(\text{churn}) \ge 80\%$ [Risco Crítico]:** Direcionamento para atendimento prioritário e ofertas agressivas de renovação de contrato (fidelização), focado em clientes com alto `MonthlyCharges`.
@@ -41,8 +41,8 @@ $$\text{Share de Churners} = \frac{\text{Churners no grupo}}{\text{Total do grup
 O modelo e a estratégia de negócio serão considerados eficazes se o Grupo Tratado contiver um Share de Churners significativamente menor e retiver mais receita (`TotalCharges`) do que o Grupo Controle.
 
 ##  Recursos necessários
-- [cite_start]**Base de Dados:** Dataset estruturado contendo dados demográficos, contratuais e financeiros de clientes (IBM Telco Churn Dataset)[cite: 71, 72].
-- [cite_start]**Infraestrutura em Nuvem:** Ambiente para execução dos pipelines de pré-processamento (Scikit-Learn), rastreamento de experimentos (MLflow) e exposição do modelo através de API (FastAPI)[cite: 29, 31, 32, 57].
+- **Base de Dados:** Dataset estruturado contendo dados demográficos, contratuais e financeiros de clientes (IBM Telco Churn Dataset).
+- **Infraestrutura em Nuvem:** Ambiente para execução dos pipelines de pré-processamento (Scikit-Learn), rastreamento de experimentos (MLflow) e exposição do modelo através de API (FastAPI).
 
 ##  Dados e variáveis relevantes (Data Understanding)
 A análise e as predições serão baseadas exclusivamente nas features nativas do ecossistema do dataset:
