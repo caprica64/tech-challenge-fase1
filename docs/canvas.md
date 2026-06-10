@@ -148,8 +148,8 @@ Reduzir o churn trimestral em **15%**, identificando clientes com alta probabili
 
 11. **Variável Alvo (Target)**
 
-- **Churn = 1** : cliente cancelou nos últimos 30 dias
-- **Churn = 0** : cliente permaneceu ativo
+- **Churn = 1**: cliente cancelou nos últimos 30 dias
+- **Churn = 0**: cliente permaneceu ativo
 
 12. **Riscos e Contingências**
 
