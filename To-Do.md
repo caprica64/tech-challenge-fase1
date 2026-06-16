@@ -26,29 +26,30 @@ Passo a Passo Resumido
 
 ## Bibliotecas Requeridas
 
-- [ ] PyTorch — construção e treinamento da rede neural (MLP).
-- [ ] Scikit-Learn — pipelines de pré-processamento e modelos baseline.
-- [ ] MLflow — tracking de experimentos (parâmetros, métricas, artefatos).
-- [ ] FastAPI — API de inferência do modelo.
+- [X] PyTorch — construção e treinamento da rede neural (MLP).
+- [X] Scikit-Learn — pipelines de pré-processamento e modelos baseline.
+- [X] MLflow — tracking de experimentos (parâmetros, métricas, artefatos).
+- [X] FastAPI — API de inferência do modelo.
 
 ## Boas Práticas Obrigatórias
 
 - [X] Seeds fixados para reprodutibilidade.
-- [ ] Validação cruzada estratificada.
-- [ ] Model Card documentando limitações e vieses.
-- [ ] Testes automatizados (≥ 3: smoke test, schema, API).
-- [ ] Logging estruturado (sem print()).
-- [ ] Linting com ruff sem erros.
+- [ ] Validação cruzada estratificada. <Albino>
+- [ ] Model Card documentando limitações e vieses. <Rodrigo>
+- [ ] Testes automatizados (≥ 3: smoke test, schema, API). <Allan>
+- [ ] Logging estruturado (sem print()). <Albino>
+- [ ] Linting com ruff sem erros. <Rodrigo>
 
 ## Etapa 1 — Entendimento e Preparação (Disciplinas 01 e 02)
 
 **Foco**: formulação do problema, exploração de dados e construção de baselines.
 
-- [O] Preencher ML Canvas (stakeholders, métricas de negócio, SLOs) [Ciclo de Vida, Aula 01]
+- [O] Preencher ML Canvas (stakeholders, métricas de negócio, SLOs) [Ciclo de Vida, Aula 01] <Rodrigo>
 - [X] EDA completa: volume, qualidade, distribuição, data readiness [Ciclo de Vida, Aula 01]
 - [ ] Definir métrica técnica (AUC-ROC, PR-AUC, F1) e métrica de negócio (custo de churn evitado) [Fundamentos, Aula 05]
+  - [ ] PR-AUC <<EXPLICAR RACIONAL>> Target 1 <Albino>
 - [X] Treinar baseline com DummyClassifier e Regressão Logística (Scikit-Learn) [Fundamentos, Aulas 01–02]
-- [ ] Registrar experimentos no MLflow (parâmetros, métricas, dataset version) [Ciclo de Vida, Aula 02]
+- [O] Registrar experimentos no MLflow (parâmetros, métricas, dataset version) [Ciclo de Vida, Aula 02] <Albino>
 
 **Entregável**: notebook de EDA + baselines registrados no MLflow.
 
@@ -69,7 +70,7 @@ Passo a Passo Resumido
 
 **Foco**: refatoração profissional, API de inferência e pacote reutilizável.
 
-- [ ] Refatorar código em módulos (src/) com estrutura limpa. [Eng. Software, Aula 01]
+- [O] Refatorar código em módulos (src/) com estrutura limpa. [Eng. Software, Aula 01]
 - [O] Criar pipeline reprodutível (sklearn + transformadores custom). [Eng. Software, Aula 01; Bibliotecas, Aula 02]
 - [ ] Escrever testes (pytest): unitários, schema (pandera), smoke test. [Eng. Software, Aula 03]
 - [ ] Construir API FastAPI: /predict, /health, validação Pydantic. [APIs, Aulas 01–03]
@@ -83,9 +84,9 @@ Passo a Passo Resumido
 **Foco**: consolidação, documentação e vídeo de apresentação.
 
 - [ ] Gerar Model Card completo (performance, limitações, vieses, cenários de falha). [Ciclo de Vida, Aula 03]
-- [ ] Documentar arquitetura de deploy escolhida (batch vs. real-time) + justificativa. [Ciclo de Vida, Aula 04]
+- [ ] Documentar arquitetura de deploy escolhida (batch vs. real-time) + justificativa. [Ciclo de Vida, Aula 04] <Rodrigo> racional
 - [ ] Criar plano de monitoramento (métricas, alertas, playbook de resposta). [Ciclo de Vida, Aula 05]
-- [ ] Finalizar README com instruções de setup + execução + arquitetura. [Eng. Software / APIs]
+- [ ] Finalizar README com instruções de setup + execução + arquitetura. [Eng. Software / APIs] <Rodrigo>
 
 **Entregável**: repositório final + vídeo STAR + (opcional) URL do deploy em nuvem.
 
