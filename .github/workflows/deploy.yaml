@@ -1,0 +1,27 @@
+name: AWS OIDC Connection Test
+
+on:
+  push:
+    branches: [ dev ]
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read  # This is required for actions/checkout
+
+jobs:
+  aws-connect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::861211186414:role/FIAP-Desafio1
+          aws-region: us-east-1 # Change to your preferred region
+          # Optional: mask-aws-account-id: true
+
+      - name: Verify Authentication
+        run: |
+          aws sts get-caller-identity
