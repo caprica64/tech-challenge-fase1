@@ -15,7 +15,7 @@ env:
 jobs:
   # ── 1. Verify AWS credentials ─────────────────────────────────────────────
   aws-connect:
-    name: Verify AWS Connection
+    name: Establish AWS Connection
     runs-on: ubuntu-latest
 
     steps:
