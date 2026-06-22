@@ -1,13 +1,28 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from typing import Optional
 
 app = FastAPI(title="Churn Prediction API")
 
 
 class CustomerData(BaseModel):
-    feature: float
-    # TODO: replace with actual feature columns from the trained model
+    """Input payload for churn prediction.
+
+    All fields are optional during development. Replace with
+    required fields matching the trained model's features before
+    production.
+    """
+
+    tenure_months: Optional[float] = Field(None, alias="Tenure Months")
+    monthly_charges: Optional[float] = Field(
+        None, alias="Monthly Charges"
+    )
+    total_charges: Optional[float] = Field(
+        None, alias="Total Charges"
+    )
+
+    model_config = {"populate_by_name": True}
 
 
 class PredictionResponse(BaseModel):
@@ -17,16 +32,17 @@ class PredictionResponse(BaseModel):
 
 @app.get("/health")
 def health_check() -> JSONResponse:
-    return JSONResponse(content={"status": "ok"}, status_code=200)
+    return JSONResponse(
+        content={"status": "ok"}, status_code=200
+    )
 
 
 @app.post("/predict", response_model=PredictionResponse)
-def predict_churn(data: CustomerData) -> JSONResponse:
+def predict_churn(
+    data: CustomerData = CustomerData(),
+) -> JSONResponse:
     try:
         # TODO: replace mock with real model inference
-        # input_tensor = torch.tensor([[data.feature, ...]])
-        # with torch.no_grad():
-        #     prob = model(input_tensor).item()
         prob = 0.85
 
         return JSONResponse(
