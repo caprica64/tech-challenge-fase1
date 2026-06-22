@@ -1,0 +1,39 @@
+# Runtime dependencies
+# Mirrors [project.dependencies] in pyproject.toml.
+# Generated from pyproject.toml — keep both files in sync when updating versions.
+#
+# Install:          pip install -r requirements.txt
+# Install (dev):    pip install -r requirements-dev.txt
+# Install (package): pip install -e .
+
+# ── Data ──────────────────────────────────────────────────────────────────
+pandas>=2.2
+numpy>=1.26
+openpyxl>=3.1           # read .xlsx files
+
+# ── Machine Learning ───────────────────────────────────────────────────────
+scikit-learn>=1.4
+imbalanced-learn>=0.12  # SMOTE / class balancing
+scipy>=1.13
+
+# ── Deep Learning ──────────────────────────────────────────────────────────
+torch>=2.3
+
+# ── Experiment Tracking ────────────────────────────────────────────────────
+mlflow>=2.13
+joblib>=1.4
+
+# ── API ────────────────────────────────────────────────────────────────────
+fastapi>=0.111
+uvicorn[standard]>=0.29
+pydantic>=2.7
+
+# ── Visualisation ──────────────────────────────────────────────────────────
+matplotlib>=3.9
+seaborn>=0.13
+
+# ── Explainability ─────────────────────────────────────────────────────────
+shap>=0.45
+
+# ── Data Validation ────────────────────────────────────────────────────────
+pandera>=0.19
