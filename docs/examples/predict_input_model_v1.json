@@ -1,0 +1,33 @@
+{
+  "data": [
+    {
+      "senior_citizen": 0,
+      "partner": 1,
+      "dependents": 0,
+      "tenure_months": 12,
+      "is_new_customer": 0,
+      "phone_services": 1,
+      "multiples_lines": 0,
+      "internet_dsl": 0,
+      "internet_fiber": 1,
+      "online_security": 0,
+      "online_backup": 1,
+      "device_protection": 0,
+      "tech_support": 0,
+      "streaming_tv": 1,
+      "streaming_movies": 1,
+      "contract_month_to_month": 1,
+      "contract_one_year": 0,
+      "contract_two_year": 0,
+      "paperless_billing": 1,
+      "payment_method_mailed_check": 0,
+      "payment_method_electronic_check": 1,
+      "payment_method_bank_transfer_automatic": 0,
+      "payment_method_credit_card_automatic": 0,
+      "monthly_charges": 89.9,
+      "total_charges": 1078.8,
+      "avg_ticket": 89.9,
+      "high_risk_profile": 1
+    }
+  ]
+}
