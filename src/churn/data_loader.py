@@ -4,10 +4,12 @@ from pathlib import Path
 
 import pandas as pd
 
-
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 PREPROCESSED_DATA_PATH = (
-    PROJECT_ROOT / "data" / "pre-processed" / "Telco_customer_churn_preprocessed.csv"
+    PROJECT_ROOT
+    / "data"
+    / "pre-processed"
+    / "Telco_customer_churn_preprocessed.csv"
 )
 
 TARGET_COLUMN = "target"
@@ -16,7 +18,6 @@ MONTHLY_CHARGES_COLUMN = "Monthly Charges"
 TENURE_MONTHS_COLUMN = "Tenure Months"
 ENGINEERED_MONTHLY_CHARGES_COLUMN = "Engineered Monthly Charges"
 CHARGE_REL_COLUMN = "charge_rel"
-
 
 
 REQUIRED_COLUMNS = [
@@ -35,7 +36,9 @@ def load_csv_data(path: str | Path = PREPROCESSED_DATA_PATH) -> pd.DataFrame:
         raise FileNotFoundError(f"Dataset não encontrado: {path}")
 
     if path.suffix.lower() != ".csv":
-        raise ValueError(f"Era esperado um arquivo CSV, mas foi recebido: {path.suffix}")
+        raise ValueError(
+            f"Era esperado um arquivo CSV, mas foi recebido: {path.suffix}"
+        )
 
     return pd.read_csv(path)
 
@@ -46,14 +49,17 @@ def validate_required_columns(
 ) -> None:
     """Valida se as colunas mínimas esperadas estão presentes no dataframe."""
     required_columns = required_columns or REQUIRED_COLUMNS
-    missing_columns = [column for column in required_columns if column not in df.columns]
+    missing_columns = [
+        column for column in required_columns if column not in df.columns
+    ]
 
     if missing_columns:
         raise ValueError(f"Colunas obrigatórias ausentes: {missing_columns}")
 
 
 def clean_total_charges(df: pd.DataFrame) -> pd.DataFrame:
-    """Converte a coluna Total Charges para número e troca valores vazios por zero."""
+    """Converte Total Charges para número e troca valores
+    vazios por zero."""
     df = df.copy()
 
     if TOTAL_CHARGES_COLUMN not in df.columns:
@@ -89,9 +95,6 @@ def add_engineered_features(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-
-
-
 def split_features_target(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
     """Separa o dataframe em variáveis explicativas X e variável alvo y."""
     validate_required_columns(df, required_columns=[TARGET_COLUMN])
@@ -116,7 +119,8 @@ def prepare_modeling_data(df: pd.DataFrame) -> pd.DataFrame:
 def load_modeling_data(
     path: str | Path = PREPROCESSED_DATA_PATH,
 ) -> pd.DataFrame:
-    """Carrega o dataset pré-processado e retorna as colunas usadas no notebook 02."""
+    """Carrega o dataset pré-processado e retorna as
+    colunas usadas no notebook 02."""
     df = load_csv_data(path)
 
     return prepare_modeling_data(df)

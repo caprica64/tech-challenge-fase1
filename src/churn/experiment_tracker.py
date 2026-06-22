@@ -9,10 +9,8 @@ import mlflow
 import mlflow.pytorch
 import mlflow.sklearn
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
-
 from model_trainer import ChurnModel
-
+from sklearn.preprocessing import StandardScaler
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +42,9 @@ def log_experiment(
         if params:
             serialized_params = _serialize_params(params)
             mlflow.log_params(serialized_params)
-            logger.info("Parametros registrados no MLflow: %s", serialized_params)
+            logger.info(
+                "Parametros registrados no MLflow: %s", serialized_params
+            )
 
         mlflow.log_metrics(metrics)
         logger.info("Metricas registradas no MLflow: %s", metrics)
@@ -75,7 +75,8 @@ def log_metrics_experiment(
 ) -> str:
     """Registra uma run no MLflow apenas com parametros e metricas."""
     logger.info(
-        "Iniciando registro de metricas no MLflow: experiment_name=%s, run_name=%s",
+        "Iniciando registro de metricas no MLflow: "
+        "experiment_name=%s, run_name=%s",
         experiment_name,
         run_name,
     )
@@ -90,13 +91,17 @@ def log_metrics_experiment(
         if params:
             serialized_params = _serialize_params(params)
             mlflow.log_params(serialized_params)
-            logger.info("Parametros registrados no MLflow: %s", serialized_params)
+            logger.info(
+                "Parametros registrados no MLflow: %s", serialized_params
+            )
 
         mlflow.log_metrics(metrics)
         logger.info("Metricas registradas no MLflow: %s", metrics)
 
         run_id = run.info.run_id
-        logger.info("Registro de metricas no MLflow concluido. run_id=%s", run_id)
+        logger.info(
+            "Registro de metricas no MLflow concluido. run_id=%s", run_id
+        )
         return run_id
 
 
@@ -121,8 +126,12 @@ def get_best_run(
 
     experiment = mlflow.get_experiment_by_name(experiment_name)
     if experiment is None:
-        logger.error("Experimento nao encontrado no MLflow: %s", experiment_name)
-        raise ValueError(f"Experimento nao encontrado no MLflow: {experiment_name}")
+        logger.error(
+            "Experimento nao encontrado no MLflow: %s", experiment_name
+        )
+        raise ValueError(
+            f"Experimento nao encontrado no MLflow: {experiment_name}"
+        )
 
     order_direction = "DESC" if greater_is_better else "ASC"
     runs = mlflow.search_runs(
@@ -131,8 +140,12 @@ def get_best_run(
     )
 
     if runs.empty:
-        logger.error("Nenhum run encontrado no experimento: %s", experiment_name)
-        raise ValueError(f"Nenhum run encontrado no experimento: {experiment_name}")
+        logger.error(
+            "Nenhum run encontrado no experimento: %s", experiment_name
+        )
+        raise ValueError(
+            f"Nenhum run encontrado no experimento: {experiment_name}"
+        )
 
     best_run = runs.iloc[0]
     logger.info(

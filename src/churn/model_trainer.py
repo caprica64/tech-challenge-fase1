@@ -15,7 +15,6 @@ from sklearn.preprocessing import StandardScaler
 from torch import nn
 from torch.utils.data import DataLoader, TensorDataset
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -61,8 +60,10 @@ def fit_model(
 ) -> tuple[ChurnModel, StandardScaler, list[float]]:
     """Treina a rede neural usando os conjuntos vindos do DataIngestion."""
     logger.info(
-        "Iniciando treino do modelo: amostras=%s, features=%s, hidden_layers=%s, "
-        "dropout=%.2f, activation=%s, learning_rate=%s, epochs=%s, batch_size=%s",
+        "Iniciando treino do modelo: amostras=%s, "
+        "features=%s, hidden_layers=%s, "
+        "dropout=%.2f, activation=%s, "
+        "learning_rate=%s, epochs=%s, batch_size=%s",
         len(X_train),
         X_train.shape[1],
         hidden_layers,
@@ -142,8 +143,10 @@ def cross_validate_model(
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Executa validacao cruzada estratificada para a rede neural."""
     logger.info(
-        "Iniciando validacao cruzada estratificada: amostras=%s, features=%s, "
-        "n_splits=%s, hidden_layers=%s, dropout=%.2f, learning_rate=%s, epochs=%s",
+        "Iniciando validacao cruzada estratificada: "
+        "amostras=%s, features=%s, "
+        "n_splits=%s, hidden_layers=%s, "
+        "dropout=%.2f, learning_rate=%s, epochs=%s",
         len(X),
         X.shape[1],
         n_splits,
@@ -160,7 +163,9 @@ def cross_validate_model(
     )
     fold_results = []
 
-    for fold, (train_index, valid_index) in enumerate(splitter.split(X, y), start=1):
+    for fold, (train_index, valid_index) in enumerate(
+        splitter.split(X, y), start=1
+    ):
         logger.info("Iniciando fold %s/%s", fold, n_splits)
 
         X_train_fold = X.iloc[train_index]
@@ -180,7 +185,9 @@ def cross_validate_model(
             random_state=random_state + fold,
         )
 
-        probabilities = predict_proba(model=model, scaler=scaler, X=X_valid_fold)
+        probabilities = predict_proba(
+            model=model, scaler=scaler, X=X_valid_fold
+        )
         metrics = _calculate_pr_auc(
             y_true=y_valid_fold.to_numpy(),
             probabilities=probabilities,
@@ -266,6 +273,8 @@ def _get_activation_layer(activation: str) -> nn.Module:
     if activation not in activation_layers:
         valid_options = ", ".join(activation_layers)
         logger.error("Ativacao invalida recebida: %s", activation)
-        raise ValueError(f"Ativacao invalida: {activation}. Opcoes: {valid_options}")
+        raise ValueError(
+            f"Ativacao invalida: {activation}. Opcoes: {valid_options}"
+        )
 
     return activation_layers[activation]()
