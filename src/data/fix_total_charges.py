@@ -48,7 +48,7 @@ def fix_total_charges(input_path: Path, output_path: Path) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Fix blank Total Charges values in Telco CSV.")
     parser.add_argument("--input",  type=Path, default=DEFAULT_INPUT, help="Path to input CSV")
-    parser.add_argument("--output", type=Path, default=None,          help="Path to output CSV (defaults to input)")
+    parser.add_argument("--output", type=Path, default=None, help="Path to output CSV (defaults to input)")
     args = parser.parse_args()
 
     output = args.output or args.input
