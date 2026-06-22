@@ -27,6 +27,7 @@ joblib>=1.4
 fastapi>=0.111
 uvicorn[standard]>=0.29
 pydantic>=2.7
+mangum>=0.17               # AWS Lambda / API Gateway adapter for FastAPI
 
 # ── Visualisation ──────────────────────────────────────────────────────────
 matplotlib>=3.9
