@@ -101,8 +101,21 @@ jobs:
       - name: Load and push image to ECR
         run: |
           docker load --input /tmp/image.tar
+
+          # Explicitly tag both SHA and latest to guarantee both are present
+          # regardless of what tags were embedded in the tar archive
+          docker tag ${{ env.ECR_URI }}:${{ needs.build.outputs.image_tag }} ${{ env.ECR_URI }}:latest
+
           docker push ${{ env.ECR_URI }}:${{ needs.build.outputs.image_tag }}
           docker push ${{ env.ECR_URI }}:latest
+
+          # Verify both tags are in ECR
+          echo "Verifying tags in ECR..."
+          aws ecr describe-images \
+            --repository-name churn-dev \
+            --region ${{ env.AWS_REGION }} \
+            --query "imageDetails[*].imageTags" \
+            --output table
 
       - name: Summary
         run: |
