@@ -16,7 +16,7 @@ Passo a Passo Resumido
 - [X] Estrutura organizada: src/, data/, models/, tests/, notebooks/, docs/
 - [X] README.md completo descrição do projeto
 - [O] pyproject.toml como single source of truth (dependências, linting, pytest)
-- [O] Histórico de commits limpo e significativo (não 1 commit gigante)    
+- [X] Histórico de commits limpo e significativo (não 1 commit gigante)    
 - [X] .gitignore adequado para projetos de ML
 
 ## Video & Deploy
@@ -38,7 +38,7 @@ Passo a Passo Resumido
 - [ ] Model Card documentando limitações e vieses. <Rodrigo>
 - [ ] Testes automatizados (≥ 3: smoke test, schema, API). <Allan>
 - [ ] Logging estruturado (sem print()). <Albino>
-- [ ] Linting com ruff sem erros. <Rodrigo>
+- [O] Linting com ruff sem erros. <Rodrigo>
 
 ## Etapa 1 — Entendimento e Preparação (Disciplinas 01 e 02)
 
@@ -70,10 +70,10 @@ Passo a Passo Resumido
 
 **Foco**: refatoração profissional, API de inferência e pacote reutilizável.
 
-- [O] Refatorar código em módulos (src/) com estrutura limpa. [Eng. Software, Aula 01]
+- [X] Refatorar código em módulos (src/) com estrutura limpa. [Eng. Software, Aula 01]
 - [O] Criar pipeline reprodutível (sklearn + transformadores custom). [Eng. Software, Aula 01; Bibliotecas, Aula 02]
-- [ ] Escrever testes (pytest): unitários, schema (pandera), smoke test. [Eng. Software, Aula 03]
-- [ ] Construir API FastAPI: /predict, /health, validação Pydantic. [APIs, Aulas 01–03]
+- [O] Escrever testes (pytest): unitários, schema (pandera), smoke test. [Eng. Software, Aula 03]
+- [O] Construir API FastAPI: /predict, /health, validação Pydantic. [APIs, Aulas 01–03]
 - [ ] Adicionar logging estruturado e middleware de latência. [APIs, Aula 04]
 - [O] Configurar pyproject.toml, ruff, Makefile (lint, test, run). [Eng. Software, Aulas 04–05]
 
@@ -83,8 +83,8 @@ Passo a Passo Resumido
 
 **Foco**: consolidação, documentação e vídeo de apresentação.
 
-- [ ] Gerar Model Card completo (performance, limitações, vieses, cenários de falha). [Ciclo de Vida, Aula 03]
-- [ ] Documentar arquitetura de deploy escolhida (batch vs. real-time) + justificativa. [Ciclo de Vida, Aula 04] <Rodrigo> racional
+- [O] Gerar Model Card completo (performance, limitações, vieses, cenários de falha). [Ciclo de Vida, Aula 03]
+- [X] Documentar arquitetura de deploy escolhida (batch vs. real-time) + justificativa. [Ciclo de Vida, Aula 04]
 - [ ] Criar plano de monitoramento (métricas, alertas, playbook de resposta). [Ciclo de Vida, Aula 05]
 - [ ] Finalizar README com instruções de setup + execução + arquitetura. [Eng. Software / APIs] <Rodrigo>
 

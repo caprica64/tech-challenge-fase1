@@ -115,7 +115,7 @@ jobs:
             --repository-name churn-dev \
             --region ${{ env.AWS_REGION }} \
             --query "imageDetails[*].imageTags" \
-            --output table
+            --output json
 
       - name: Summary
         run: |
