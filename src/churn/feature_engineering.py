@@ -1,4 +1,4 @@
-""" 
+"""
 Engenharia de features para o dataset de churn. 
 Este módulo inclui funções para criar novas features, transformar as existentes e selecionar as mais relevantes para o modelo de previsão de churn.
 """

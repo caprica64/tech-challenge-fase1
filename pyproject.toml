@@ -83,12 +83,12 @@ where = ["src"]
 
 # ── Ruff (linting + formatting) ────────────────────────────────────────────
 [tool.ruff]
-line-length = 88
+line-length = 120
 target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "W"]
-ignore = ["F401"]  # F401: unused imports
+ignore = ["F401", "F811", "E402"]  # F401: unused imports, F811: redefinition of unused, E402: import not at top
 
 [tool.ruff.lint.isort]
 known-first-party = ["src"]
