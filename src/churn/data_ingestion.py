@@ -210,7 +210,7 @@ class DataIngestion:
             random_state,
             stratify,
         )
-        
+
         self._validate_modeling_columns(df)
 
         X = df[MODEL_FEATURES]

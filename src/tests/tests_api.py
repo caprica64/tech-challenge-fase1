@@ -11,7 +11,6 @@ def test_health_check():
 def test_predict_endpoint():
     payload = {
         "feature": 12.0
-        
     }
     response = client.post("/predict", json=payload)
     assert response.status_code == 200
