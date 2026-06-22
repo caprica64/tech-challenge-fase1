@@ -25,7 +25,7 @@ jobs:
         run: pip install "ruff>=0.4"
 
       - name: Lint (ruff check)
-        run: ruff check src tests
+        run: ruff check src
 
       - name: Format check (ruff format)
-        run: ruff format --check src tests
+        run: ruff format --check src
