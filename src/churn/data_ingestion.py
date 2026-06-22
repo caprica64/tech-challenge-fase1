@@ -1,5 +1,6 @@
 """Funcoes de carga e tratamento dos dados de churn usados no projeto."""
 
+import logging
 from pathlib import Path
 
 import numpy as np
@@ -43,6 +44,9 @@ MODEL_FEATURES = [
 TARGET_COLUMN = "target"
 
 
+logger = logging.getLogger(__name__)
+
+
 class DataIngestion:
     """
     Classe responsavel pela ingestao e tratamento dos dados de churn.
@@ -56,15 +60,22 @@ class DataIngestion:
 
     def load_data(self) -> pd.DataFrame:
         """Carrega os dados pre-processados de churn."""
+        logger.info("Carregando dados de churn em: %s", self.data_path)
+
         if not self.data_path.exists():
+            logger.error("Arquivo de dados nao encontrado: %s", self.data_path)
             raise FileNotFoundError(f"Arquivo de dados nao encontrado: {self.data_path}")
-        return pd.read_csv(self.data_path)
+
+        df = pd.read_csv(self.data_path)
+        logger.info("Dados carregados com shape=%s", df.shape)
+        return df
 
     def treat_data(self, df: pd.DataFrame | None = None) -> pd.DataFrame:
         """Realiza o tratamento de dados, incluindo limpeza, transformacoes e criacao de novas features."""
         if df is None:
             df = self.load_data()
 
+        logger.info("Iniciando tratamento dos dados com shape=%s", df.shape)
         df = df.copy()
         self._validate_required_columns(df)
 
@@ -181,6 +192,7 @@ class DataIngestion:
         for col in binary_cols:
             df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0).astype(int)
 
+        logger.info("Tratamento dos dados concluido com shape=%s", df.shape)
         return df
 
     def split_train_test(
@@ -191,6 +203,13 @@ class DataIngestion:
         stratify: bool = True,
     ):
         """Divide os dados em treino e teste"""
+        logger.info(
+            "Iniciando divisao treino/teste: test_size=%s, random_state=%s, "
+            "stratify=%s",
+            test_size,
+            random_state,
+            stratify,
+        )
         
         self._validate_modeling_columns(df)
 
@@ -198,13 +217,23 @@ class DataIngestion:
         y = df[TARGET_COLUMN]
         stratify_values = y if stratify else None
 
-        return train_test_split(
+        split = train_test_split(
             X,
             y,
             test_size=test_size,
             random_state=random_state,
             stratify=stratify_values,
         )
+        X_train, X_test, y_train, y_test = split
+
+        logger.info(
+            "Divisao concluida: X_train=%s, X_test=%s, y_train=%s, y_test=%s",
+            X_train.shape,
+            X_test.shape,
+            y_train.shape,
+            y_test.shape,
+        )
+        return split
 
     @staticmethod
     def _yes_no_to_binary(series: pd.Series) -> pd.Series:
@@ -236,6 +265,7 @@ class DataIngestion:
         ]
         missing_columns = [col for col in required_columns if col not in df.columns]
         if missing_columns:
+            logger.error("Colunas obrigatorias ausentes: %s", missing_columns)
             raise ValueError(f"Colunas obrigatorias ausentes: {missing_columns}")
 
     @staticmethod
@@ -243,4 +273,5 @@ class DataIngestion:
         required_columns = [*MODEL_FEATURES, TARGET_COLUMN]
         missing_columns = [col for col in required_columns if col not in df.columns]
         if missing_columns:
+            logger.error("Colunas de modelagem ausentes: %s", missing_columns)
             raise ValueError(f"Colunas de modelagem ausentes: {missing_columns}")
