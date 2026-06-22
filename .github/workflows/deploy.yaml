@@ -79,6 +79,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
 
+    outputs:
+      image_tag: ${{ needs.build.outputs.image_tag }}
+
     steps:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
@@ -111,7 +114,7 @@ jobs:
   deploy-lambda:
     name: Update Lambda Function
     runs-on: ubuntu-latest
-    needs: publish
+    needs: [build, publish]
 
     env:
       LAMBDA_FUNCTION_NAME: churn-dev
