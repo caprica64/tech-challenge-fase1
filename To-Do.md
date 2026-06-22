@@ -22,7 +22,7 @@ Passo a Passo Resumido
 ## Video & Deploy
 
 - [ ] Video de 5 minutos
-- [ ] Deploy em ambiente de produção
+- [O] Deploy em ambiente de produção
 
 ## Bibliotecas Requeridas
 
