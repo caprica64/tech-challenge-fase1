@@ -1,31 +1,16 @@
-# ── Build stage ────────────────────────────────────────────────────────────
-FROM python:3.12-slim AS builder
+# AWS Lambda base image — includes the Lambda Runtime Interface Client
+FROM public.ecr.aws/lambda/python:3.12
 
-WORKDIR /app
-
-# Install build tools and copy only dependency files first (layer cache)
-COPY requirements.txt ./
+# Install dependencies into the Lambda task root (layer caching: copy first, then install)
+COPY requirements.txt ${LAMBDA_TASK_ROOT}/
 RUN pip install --no-cache-dir --upgrade pip \
- && pip install --no-cache-dir -r requirements.txt
+ && pip install --no-cache-dir -r ${LAMBDA_TASK_ROOT}/requirements.txt
 
-# ── Runtime stage ───────────────────────────────────────────────────────────
-FROM python:3.12-slim AS runtime
+# Copy application source and saved models
+COPY src/    ${LAMBDA_TASK_ROOT}/src/
+COPY models/ ${LAMBDA_TASK_ROOT}/models/
+COPY main.py ${LAMBDA_TASK_ROOT}/
 
-WORKDIR /app
-
-# Copy installed packages from builder
-COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
-COPY --from=builder /usr/local/bin /usr/local/bin
-
-# Copy application source
-COPY src/ ./src/
-COPY models/ ./models/
-
-# Non-root user for security
-RUN useradd --no-create-home --shell /bin/false appuser
-USER appuser
-
-EXPOSE 8000
-
-# Default: start FastAPI inference API
-CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Handler format: <module>.<function>
+# Lambda invokes handler(event, context) via Mangum
+CMD ["main.handler"]
