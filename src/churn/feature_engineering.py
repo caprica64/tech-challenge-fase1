@@ -1,0 +1,48 @@
+""" 
+Engenharia de features para o dataset de churn. 
+Este módulo inclui funções para criar novas features, transformar as existentes e selecionar as mais relevantes para o modelo de previsão de churn.
+"""
+
+
+
+NOTEBOOK_SELECTED_FEATURES = [
+    "Tenure Months",
+    "Monthly Charges",
+    "Total Charges",
+    "Churn Score",
+    "Dependents_Yes",
+    "Internet Service_Fiber optic",
+    "Internet Service_No",
+    "Online Security_No internet service",
+    "Online Backup_No internet service",
+    "Device Protection_No internet service",
+    "Tech Support_No internet service",
+    "Streaming TV_No internet service",
+    "Streaming Movies_No internet service",
+    "Contract_One year",
+    "Contract_Two year",
+    "Paperless Billing_Yes",
+    "Payment Method_Electronic check",
+    "Churn Label_Yes",
+    "Churn Reason_Attitude of support person",
+    "Churn Reason_Competitor had better devices",
+    "Churn Reason_Competitor made better offer",
+    "Churn Reason_Competitor offered higher download speeds",
+    "Churn Reason_Competitor offered more data",
+    "Churn Reason_Don't know",
+    "Churn Reason_Lack of self-service on Website",
+    "Churn Reason_Network reliability",
+    "Churn Reason_Price too high",
+    "Churn Reason_Product dissatisfaction",
+    "Churn Reason_Service dissatisfaction",
+    "charge_rel",
+]
+
+
+
+def select_notebook_features(df: pd.DataFrame) -> pd.DataFrame:
+    """Seleciona as 30 colunas definidas no notebook 02 e mantém a coluna alvo."""
+    selected_columns = [TARGET_COLUMN, *NOTEBOOK_SELECTED_FEATURES]
+    validate_required_columns(df, required_columns=selected_columns)
+
+    return df[selected_columns].copy()
