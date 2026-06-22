@@ -101,21 +101,8 @@ jobs:
       - name: Load and push image to ECR
         run: |
           docker load --input /tmp/image.tar
-
-          # Explicitly tag both SHA and latest to guarantee both are present
-          # regardless of what tags were embedded in the tar archive
-          docker tag ${{ env.ECR_URI }}:${{ needs.build.outputs.image_tag }} ${{ env.ECR_URI }}:latest
-
           docker push ${{ env.ECR_URI }}:${{ needs.build.outputs.image_tag }}
           docker push ${{ env.ECR_URI }}:latest
-
-          # Verify both tags are in ECR
-          echo "Verifying tags in ECR..."
-          aws ecr describe-images \
-            --repository-name churn-dev \
-            --region ${{ env.AWS_REGION }} \
-            --query "imageDetails[*].imageTags" \
-            --output json
 
       - name: Summary
         run: |
@@ -124,36 +111,36 @@ jobs:
           echo "- \`${{ env.ECR_URI }}:latest\`" >> $GITHUB_STEP_SUMMARY
 
   # ── 4. Update Lambda to use the new image ─────────────────────────────────
-  # deploy-lambda:
-  #   name: Update Lambda Function
-  #   runs-on: ubuntu-latest
-  #   needs: [build, publish]
+  deploy-lambda:
+    name: Update Lambda Function
+    runs-on: ubuntu-latest
+    needs: [build, publish]
 
-  #   env:
-  #     LAMBDA_FUNCTION_NAME: churn-dev
+    env:
+      LAMBDA_FUNCTION_NAME: churn-dev
 
-  #   steps:
-  #     - name: Configure AWS credentials (OIDC)
-  #       uses: aws-actions/configure-aws-credentials@v4
-  #       with:
-  #         role-to-assume: arn:aws:iam::861211186414:role/FIAP-Desafio1
-  #         aws-region: ${{ env.AWS_REGION }}
+    steps:
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::861211186414:role/FIAP-Desafio1
+          aws-region: ${{ env.AWS_REGION }}
 
-  #     - name: Update Lambda image
-  #       run: |
-  #         aws lambda update-function-code \
-  #           --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
-  #           --image-uri ${{ env.ECR_URI }}:${{ needs.build.outputs.image_tag }} \
-  #           --region ${{ env.AWS_REGION }}
+      - name: Update Lambda image
+        run: |
+          aws lambda update-function-code \
+            --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
+            --image-uri ${{ env.ECR_URI }}:${{ needs.build.outputs.image_tag }} \
+            --region ${{ env.AWS_REGION }}
 
-  #     - name: Wait for update to complete
-  #       run: |
-  #         aws lambda wait function-updated \
-  #           --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
-  #           --region ${{ env.AWS_REGION }}
+      - name: Wait for update to complete
+        run: |
+          aws lambda wait function-updated \
+            --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
+            --region ${{ env.AWS_REGION }}
 
-  #     - name: Summary
-  #       run: |
-  #         echo "### Lambda updated" >> $GITHUB_STEP_SUMMARY
-  #         echo "- Function: \`${{ env.LAMBDA_FUNCTION_NAME }}\`" >> $GITHUB_STEP_SUMMARY
-  #         echo "- Image: \`${{ env.ECR_URI }}:${{ needs.build.outputs.image_tag }}\`" >> $GITHUB_STEP_SUMMARY
+      - name: Summary
+        run: |
+          echo "### Lambda updated" >> $GITHUB_STEP_SUMMARY
+          echo "- Function: \`${{ env.LAMBDA_FUNCTION_NAME }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Image: \`${{ env.ECR_URI }}:${{ needs.build.outputs.image_tag }}\`" >> $GITHUB_STEP_SUMMARY
