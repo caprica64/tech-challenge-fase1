@@ -115,4 +115,34 @@ A infraestrutura atual do projeto (Lambda + ECR + GitHub Actions CI/CD) já est�
 
 # Instruções
 
-Esses são os passos para implementar o modelo...
+Esses são os passos para implementar o modelo
+
+## Set up de ambiente AWS
+
+Passo opcional se quiser rodar o projeto em nuvem pública.
+
+### Requerimentos
+
+ - Uma conta AWS com permissão de administrador
+ - Provedor de identidade (identity provider, prerencialmente tipo OIDC) com GitHub e GitLab.
+ - GitLab foi usado para subir infraestrutura na AWS via Terraform. 
+ - Configuração do GitLab para manter state (estado) do workspace Terraform localmente nele. Opcionalmente pode-se configurar para subir o state remotamente em S3 com lock em DynamoDB ou no serviço Hashicorp Cloud (antigo Terraform Cloud). Não faz parte do escopo desse projeto detalhar como fazer.
+ - Role que o GitLab assume com privilégios que permitam construir o ambiente. Lista de serviços relevantes. Tenha em mente que outros serviços podem ser necessários co diferentes permissões. Entenda impacto em serviços relevantes como Route 53.
+
+     AWS Security Token Service
+     Amazon Elastic Container Registry
+     Manage - Amazon API Gateway
+     AWS Lambda
+     Amazon Route 53
+     AWS Certificate Manager
+     AWS Identity and Access Management
+     Amazon CloudWatch Logs
+     AWS Key Management Service
+     Amazon EventBridge Schemas
+
+### Execute um commit ou merge na branch main do repositório
+
+Não estamos tratando a infraestrutura como diferentes ambientes. Como melhoria desse projeto, ele pode ser expandido para suportar diferentes ambientes de endpoints com nome de domínio diferentes como https://churn-dev.caprica.tech, https://churn-stage.caprica.tech e https://churn.caprica.tech
+
+Como o foco é na construção do modelo e inferência, o escopo desse projeto trata apenas um ambiente de infraestrutura governado pela branch **main**. Tenha em mente que há melhores práticas para manter mais de um ambiente, proteção de branch para ambiente produtivo, revisão de pares via Pull Request (PR).
+
