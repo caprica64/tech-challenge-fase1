@@ -11,10 +11,18 @@ Tech Challenge Fase 1 do MLET10 da FIAP
 | Pedro Henrique Silva Gaspar | rm | [Github](xx) - [Linkedin](xx)|
 | Breno Toledo Kutti Lugão | rm | [Github](xx) - [Linkedin](xx)|
 
+## Repositório de infraestrutura na AWS
+
+Repositório de infraestrutura na AWS foi montado no GitLab público em [Infra desafio 1](https://gitlab.com/mlet10/infra-desafio1/)
+
+Este projeto Terraform com pipeline no GitLab constrói um API Gateway aberto na Internet com hostname churn dentro de um domínio já criado e hospedado na própria conta AWS (blog de outro projeto). O API Gateway possui rotas para um backend em Lambda com um runtime em container tipo Docker/OCI que carrega imagem template do ECR. 
+
+Este projeto do runtime e inferência de ML também atualiza o ECR que está indicado em variáveis do GitHub Actions. O projeto em Terraform pode ser adaptado para criar ambiente similar.
+
 
 # Objetivo do desafio
 
-O objetivo desse desafio é implementar um modelo de previsão de churn a partir dos dados XYZ da IBM com relação ao XPTO...
+O objetivo desse desafio é implementar um modelo de previsão de churn a partir dos dados de churn da IBM com relação a serviços de telecomunicações na California
 
 ## 📁 Estrutura de pastas
 
