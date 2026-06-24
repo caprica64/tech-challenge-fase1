@@ -71,11 +71,11 @@ Passo a Passo Resumido
 **Foco**: refatoração profissional, API de inferência e pacote reutilizável.
 
 - [X] Refatorar código em módulos (src/) com estrutura limpa. [Eng. Software, Aula 01]
-- [O] Criar pipeline reprodutível (sklearn + transformadores custom). [Eng. Software, Aula 01; Bibliotecas, Aula 02]
-- [O] Escrever testes (pytest): unitários, schema (pandera), smoke test. [Eng. Software, Aula 03]
+- [X] Criar pipeline reprodutível (sklearn + transformadores custom). [Eng. Software, Aula 01; Bibliotecas, Aula 02]
+- [X] Escrever testes (pytest): unitários, schema (pandera), smoke test. [Eng. Software, Aula 03]
 - [X] Construir API FastAPI: /predict, /health, validação Pydantic. [APIs, Aulas 01–03]
-- [ ] Adicionar logging estruturado e middleware de latência. [APIs, Aula 04]
-- [O] Configurar pyproject.toml, ruff, Makefile (lint, test, run). [Eng. Software, Aulas 04–05]
+- [X] Adicionar logging estruturado e middleware de latência. [APIs, Aula 04]
+- [X] Configurar pyproject.toml, ruff, Makefile (lint, test, run). [Eng. Software, Aulas 04–05]
 
 **Entregável**: repositório refatorado + API funcional + testes passando.
 
@@ -86,7 +86,7 @@ Passo a Passo Resumido
 - [X] Gerar Model Card completo (performance, limitações, vieses, cenários de falha). [Ciclo de Vida, Aula 03]
 - [X] Documentar arquitetura de deploy escolhida (batch vs. real-time) + justificativa. [Ciclo de Vida, Aula 04]
 - [ ] Criar plano de monitoramento (métricas, alertas, playbook de resposta). [Ciclo de Vida, Aula 05]
-- [ ] Finalizar README com instruções de setup + execução + arquitetura. [Eng. Software / APIs] <Rodrigo>
+- [X] Finalizar README com instruções de setup + execução + arquitetura. [Eng. Software / APIs] <Rodrigo>
 
 **Entregável**: repositório final + vídeo STAR + (opcional) URL do deploy em nuvem.
 
