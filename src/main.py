@@ -1,7 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
-from typing import Optional
 
 app = FastAPI(title="Churn Prediction API")
 
@@ -9,25 +8,38 @@ app = FastAPI(title="Churn Prediction API")
 class CustomerData(BaseModel):
     """Input payload for churn prediction.
 
-    All fields are optional during development. Replace with
-    required fields matching the trained model's features before
-    production.
+    Pydantic validates types and value ranges. FastAPI returns
+    a 422 with detailed errors if any constraint is violated.
     """
 
-    tenure_months: Optional[float] = Field(None, alias="Tenure Months")
-    monthly_charges: Optional[float] = Field(
-        None, alias="Monthly Charges"
+    tenure_months: float = Field(
+        ...,
+        alias="Tenure Months",
+        ge=0,
+        le=100,
+        description="Meses como cliente (0-100)",
     )
-    total_charges: Optional[float] = Field(
-        None, alias="Total Charges"
+    monthly_charges: float = Field(
+        ...,
+        alias="Monthly Charges",
+        ge=0,
+        description="Cobrança mensal em USD",
+    )
+    total_charges: float = Field(
+        ...,
+        alias="Total Charges",
+        ge=0,
+        description="Total cobrado acumulado em USD",
     )
 
     model_config = {"populate_by_name": True}
 
 
 class PredictionResponse(BaseModel):
-    churn_probability: float
-    churn_prediction: int
+    churn_probability: float = Field(
+        ..., ge=0.0, le=1.0
+    )
+    churn_prediction: float = Field(..., ge=0, le=1)
 
 
 @app.get("/health")
@@ -38,9 +50,7 @@ def health_check() -> JSONResponse:
 
 
 @app.post("/predict", response_model=PredictionResponse)
-def predict_churn(
-    data: CustomerData = CustomerData(),
-) -> JSONResponse:
+def predict_churn(data: CustomerData) -> JSONResponse:
     try:
         # TODO: replace mock with real model inference
         prob = 0.85
@@ -53,4 +63,6 @@ def predict_churn(
             status_code=200,
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(
+            status_code=500, detail=str(e)
+        )
