@@ -256,7 +256,7 @@ Temporary Items
 models/*.pkl
 models/*.pt
 models/*.pth
-models/*.joblib
+# models/*.joblib  # kept in git for Lambda deployment
 models/*.h5
 models/*.onnx
 models/*.bin
