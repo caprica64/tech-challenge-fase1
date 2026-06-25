@@ -72,8 +72,10 @@ class DataIngestion:
         return df
 
     def treat_data(self, df: pd.DataFrame | None = None) -> pd.DataFrame:
-        """Realiza tratamento de dados: limpeza, transformacoes
-        e criacao de novas features."""
+        """
+        Realiza o tratamento de dados, incluindo limpeza, transformacoes
+        e criacao de novas features.
+        """
         if df is None:
             df = self.load_data()
 
@@ -100,9 +102,7 @@ class DataIngestion:
         df["partner"] = self._yes_no_to_binary(df["partner"])
         df["dependents"] = self._yes_no_to_binary(df["dependents"])
         df["phone_services"] = self._yes_no_to_binary(df["phone_service"])
-        df["paperless_billing"] = self._yes_no_to_binary(
-            df["paperless_billing"]
-        )
+        df["paperless_billing"] = self._yes_no_to_binary(df["paperless_billing"])
 
         df["is_new_customer"] = np.where(df["tenure_months"].isin([1, 2]), 1, 0)
         df["multiples_lines"] = np.where(
@@ -112,9 +112,7 @@ class DataIngestion:
         )
 
         df["internet_dsl"] = np.where(df["internet_service"] == "DSL", 1, 0)
-        df["internet_fiber"] = np.where(
-            df["internet_service"] == "Fiber optic", 1, 0
-        )
+        df["internet_fiber"] = np.where(df["internet_service"] == "Fiber optic", 1, 0)
         df["internet_none"] = np.where(df["internet_service"] == "No", 1, 0)
 
         cols_services = [
@@ -129,9 +127,7 @@ class DataIngestion:
             df[col] = np.where(
                 df[col] == "Yes",
                 1,
-                np.where(
-                    df[col].isin(["No", "No internet service"]), 0, np.nan
-                ),
+                np.where(df[col].isin(["No", "No internet service"]), 0, np.nan),
             )
 
         df["contract_month_to_month"] = np.where(
@@ -168,7 +164,9 @@ class DataIngestion:
             0,
         )
         df["avg_ticket"] = np.where(
-            np.isinf(df["avg_ticket"]), np.nan, df["avg_ticket"]
+            np.isinf(df["avg_ticket"]),
+            np.nan,
+            df["avg_ticket"],
         )
         df["avg_ticket"] = df["avg_ticket"].fillna(0)
 
@@ -200,9 +198,7 @@ class DataIngestion:
 
         df["tenure_months"] = df["tenure_months"].fillna(0).astype(int)
         for col in binary_cols:
-            df[col] = (
-                pd.to_numeric(df[col], errors="coerce").fillna(0).astype(int)
-            )
+            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0).astype(int)
 
         logger.info("Tratamento dos dados concluido com shape=%s", df.shape)
         return df
@@ -275,23 +271,15 @@ class DataIngestion:
             "total_charges",
             "churn_value",
         ]
-        missing_columns = [
-            col for col in required_columns if col not in df.columns
-        ]
+        missing_columns = [col for col in required_columns if col not in df.columns]
         if missing_columns:
             logger.error("Colunas obrigatorias ausentes: %s", missing_columns)
-            raise ValueError(
-                f"Colunas obrigatorias ausentes: {missing_columns}"
-            )
+            raise ValueError(f"Colunas obrigatorias ausentes: {missing_columns}")
 
     @staticmethod
     def _validate_modeling_columns(df: pd.DataFrame) -> None:
         required_columns = [*MODEL_FEATURES, TARGET_COLUMN]
-        missing_columns = [
-            col for col in required_columns if col not in df.columns
-        ]
+        missing_columns = [col for col in required_columns if col not in df.columns]
         if missing_columns:
             logger.error("Colunas de modelagem ausentes: %s", missing_columns)
-            raise ValueError(
-                f"Colunas de modelagem ausentes: {missing_columns}"
-            )
+            raise ValueError(f"Colunas de modelagem ausentes: {missing_columns}")

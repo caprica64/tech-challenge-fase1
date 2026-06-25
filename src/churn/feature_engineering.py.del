@@ -1,10 +1,9 @@
+""" 
+Engenharia de features para o dataset de churn. 
+Este módulo inclui funções para criar novas features, transformar as existentes e selecionar as mais relevantes para o modelo de previsão de churn.
 """
-Engenharia de features para o dataset de churn.
 
-Este módulo inclui funções para criar novas features, transformar
-as existentes e selecionar as mais relevantes para o modelo de
-previsão de churn.
-"""
+
 
 NOTEBOOK_SELECTED_FEATURES = [
     "Tenure Months",
@@ -40,9 +39,9 @@ NOTEBOOK_SELECTED_FEATURES = [
 ]
 
 
+
 def select_notebook_features(df: pd.DataFrame) -> pd.DataFrame:
-    """Seleciona as 30 colunas definidas no notebook 02
-    e mantém a coluna alvo."""
+    """Seleciona as 30 colunas definidas no notebook 02 e mantém a coluna alvo."""
     selected_columns = [TARGET_COLUMN, *NOTEBOOK_SELECTED_FEATURES]
     validate_required_columns(df, required_columns=selected_columns)
 
