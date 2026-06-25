@@ -58,11 +58,13 @@ def fit_model(
     epochs: int = 50,
     batch_size: int = 64,
     random_state: int = 42,
+    use_pos_weight: bool = False,
 ) -> tuple[ChurnModel, StandardScaler, list[float]]:
     """Treina a rede neural usando os conjuntos vindos do DataIngestion."""
     logger.info(
         "Iniciando treino do modelo: amostras=%s, features=%s, hidden_layers=%s, "
-        "dropout=%.2f, activation=%s, learning_rate=%s, epochs=%s, batch_size=%s",
+        "dropout=%.2f, activation=%s, learning_rate=%s, epochs=%s, batch_size=%s, "
+        "use_pos_weight=%s",
         len(X_train),
         X_train.shape[1],
         hidden_layers,
@@ -71,6 +73,7 @@ def fit_model(
         learning_rate,
         epochs,
         batch_size,
+        use_pos_weight,
     )
 
     np.random.seed(random_state)
@@ -97,7 +100,10 @@ def fit_model(
         dropout=dropout,
         activation=activation,
     )
-    loss_function = nn.BCEWithLogitsLoss()
+    loss_function = _build_loss_function(
+        y_train_tensor=y_train_tensor,
+        use_pos_weight=use_pos_weight,
+    )
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
     losses = []
@@ -139,11 +145,13 @@ def cross_validate_model(
     epochs: int = 50,
     batch_size: int = 64,
     random_state: int = 42,
+    use_pos_weight: bool = False,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Executa validacao cruzada estratificada para a rede neural."""
     logger.info(
         "Iniciando validacao cruzada estratificada: amostras=%s, features=%s, "
-        "n_splits=%s, hidden_layers=%s, dropout=%.2f, learning_rate=%s, epochs=%s",
+        "n_splits=%s, hidden_layers=%s, dropout=%.2f, learning_rate=%s, "
+        "epochs=%s, use_pos_weight=%s",
         len(X),
         X.shape[1],
         n_splits,
@@ -151,6 +159,7 @@ def cross_validate_model(
         dropout,
         learning_rate,
         epochs,
+        use_pos_weight,
     )
 
     splitter = StratifiedKFold(
@@ -178,6 +187,7 @@ def cross_validate_model(
             epochs=epochs,
             batch_size=batch_size,
             random_state=random_state + fold,
+            use_pos_weight=use_pos_weight,
         )
 
         probabilities = predict_proba(model=model, scaler=scaler, X=X_valid_fold)
@@ -253,6 +263,30 @@ def _calculate_pr_auc(
     return {
         "pr_auc": average_precision_score(y_true, probabilities),
     }
+
+
+def _build_loss_function(
+    y_train_tensor: torch.Tensor,
+    use_pos_weight: bool,
+) -> nn.BCEWithLogitsLoss:
+    if not use_pos_weight:
+        return nn.BCEWithLogitsLoss()
+
+    positive_count = y_train_tensor.sum()
+    negative_count = len(y_train_tensor) - positive_count
+
+    if positive_count.item() == 0:
+        logger.warning(
+            "use_pos_weight=True foi solicitado, mas nao ha classe positiva no treino."
+        )
+        return nn.BCEWithLogitsLoss()
+
+    pos_weight = negative_count / positive_count
+    logger.info("Usando pos_weight=%.6f no BCEWithLogitsLoss", pos_weight.item())
+
+    return nn.BCEWithLogitsLoss(
+        pos_weight=torch.tensor(pos_weight.item(), dtype=torch.float32)
+    )
 
 
 def _get_activation_layer(activation: str) -> nn.Module:
