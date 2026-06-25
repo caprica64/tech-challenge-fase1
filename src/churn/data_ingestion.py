@@ -63,14 +63,19 @@ class DataIngestion:
 
         if not self.data_path.exists():
             logger.error("Arquivo de dados nao encontrado: %s", self.data_path)
-            raise FileNotFoundError(f"Arquivo de dados nao encontrado: {self.data_path}")
+            raise FileNotFoundError(
+                f"Arquivo de dados nao encontrado: {self.data_path}"
+            )
 
         df = pd.read_csv(self.data_path)
         logger.info("Dados carregados com shape=%s", df.shape)
         return df
 
     def treat_data(self, df: pd.DataFrame | None = None) -> pd.DataFrame:
-        """Realiza o tratamento de dados, incluindo limpeza, transformacoes e criacao de novas features."""
+        """
+        Realiza o tratamento de dados, incluindo limpeza, transformacoes
+        e criacao de novas features.
+        """
         if df is None:
             df = self.load_data()
 
@@ -158,7 +163,11 @@ class DataIngestion:
             df["total_charges"] / df["tenure_months"],
             0,
         )
-        df["avg_ticket"] = np.where(np.isinf(df["avg_ticket"]), np.nan, df["avg_ticket"])
+        df["avg_ticket"] = np.where(
+            np.isinf(df["avg_ticket"]),
+            np.nan,
+            df["avg_ticket"],
+        )
         df["avg_ticket"] = df["avg_ticket"].fillna(0)
 
         binary_cols = [
@@ -209,7 +218,7 @@ class DataIngestion:
             random_state,
             stratify,
         )
-        
+
         self._validate_modeling_columns(df)
 
         X = df[MODEL_FEATURES]

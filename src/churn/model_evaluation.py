@@ -5,11 +5,9 @@ from __future__ import annotations
 import logging
 
 import pandas as pd
+from model_trainer import ChurnModel, predict_proba
 from sklearn.metrics import average_precision_score
 from sklearn.preprocessing import StandardScaler
-
-from model_trainer import ChurnModel, predict_proba
-
 
 logger = logging.getLogger(__name__)
 
