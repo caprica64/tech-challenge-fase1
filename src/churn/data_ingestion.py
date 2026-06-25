@@ -7,7 +7,6 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 PREPROCESSED_DATA_PATH = (
     PROJECT_ROOT / "data" / "processed" / "data_telcom_customer_churn_ibm.csv"

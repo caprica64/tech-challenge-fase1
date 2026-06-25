@@ -53,6 +53,7 @@ dependencies = [
   "fastapi>=0.111",
   "uvicorn[standard]>=0.29",
   "pydantic>=2.7",
+  "mangum>=0.17",            # AWS Lambda / API Gateway adapter for FastAPI
 
   # Visualisation
   "matplotlib>=3.9",
@@ -87,7 +88,10 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "W"]
-ignore = ["E501"]  # line length handled by formatter
+ignore = ["F401", "F811", "F821", "E402"]  # F401: unused imports, F811: redefinition of unused, F821: undefined name, E402: import not at top
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
 
 [tool.ruff.format]
 quote-style = "double"

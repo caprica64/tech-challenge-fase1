@@ -15,14 +15,14 @@ Passo a Passo Resumido
 
 - [X] Estrutura organizada: src/, data/, models/, tests/, notebooks/, docs/
 - [X] README.md completo descrição do projeto
-- [O] pyproject.toml como single source of truth (dependências, linting, pytest)
-- [O] Histórico de commits limpo e significativo (não 1 commit gigante)    
+- [X] pyproject.toml como single source of truth (dependências, linting, pytest)
+- [X] Histórico de commits limpo e significativo (não 1 commit gigante)    
 - [X] .gitignore adequado para projetos de ML
 
 ## Video & Deploy
 
 - [ ] Video de 5 minutos
-- [ ] Deploy em ambiente de produção
+- [O] Deploy em ambiente de produção
 
 ## Bibliotecas Requeridas
 
@@ -35,10 +35,10 @@ Passo a Passo Resumido
 
 - [X] Seeds fixados para reprodutibilidade.
 - [ ] Validação cruzada estratificada. <Albino>
-- [ ] Model Card documentando limitações e vieses. <Rodrigo>
+- [O] Model Card documentando limitações e vieses. <Rodrigo>
 - [ ] Testes automatizados (≥ 3: smoke test, schema, API). <Allan>
 - [ ] Logging estruturado (sem print()). <Albino>
-- [ ] Linting com ruff sem erros. <Rodrigo>
+- [O] Linting com ruff sem erros. <Rodrigo>
 
 ## Etapa 1 — Entendimento e Preparação (Disciplinas 01 e 02)
 
@@ -70,12 +70,12 @@ Passo a Passo Resumido
 
 **Foco**: refatoração profissional, API de inferência e pacote reutilizável.
 
-- [O] Refatorar código em módulos (src/) com estrutura limpa. [Eng. Software, Aula 01]
-- [O] Criar pipeline reprodutível (sklearn + transformadores custom). [Eng. Software, Aula 01; Bibliotecas, Aula 02]
-- [ ] Escrever testes (pytest): unitários, schema (pandera), smoke test. [Eng. Software, Aula 03]
-- [ ] Construir API FastAPI: /predict, /health, validação Pydantic. [APIs, Aulas 01–03]
-- [ ] Adicionar logging estruturado e middleware de latência. [APIs, Aula 04]
-- [O] Configurar pyproject.toml, ruff, Makefile (lint, test, run). [Eng. Software, Aulas 04–05]
+- [X] Refatorar código em módulos (src/) com estrutura limpa. [Eng. Software, Aula 01]
+- [X] Criar pipeline reprodutível (sklearn + transformadores custom). [Eng. Software, Aula 01; Bibliotecas, Aula 02]
+- [X] Escrever testes (pytest): unitários, schema (pandera), smoke test. [Eng. Software, Aula 03]
+- [X] Construir API FastAPI: /predict, /health, validação Pydantic. [APIs, Aulas 01–03]
+- [X] Adicionar logging estruturado e middleware de latência. [APIs, Aula 04]
+- [X] Configurar pyproject.toml, ruff, Makefile (lint, test, run). [Eng. Software, Aulas 04–05]
 
 **Entregável**: repositório refatorado + API funcional + testes passando.
 
@@ -83,10 +83,10 @@ Passo a Passo Resumido
 
 **Foco**: consolidação, documentação e vídeo de apresentação.
 
-- [ ] Gerar Model Card completo (performance, limitações, vieses, cenários de falha). [Ciclo de Vida, Aula 03]
-- [ ] Documentar arquitetura de deploy escolhida (batch vs. real-time) + justificativa. [Ciclo de Vida, Aula 04] <Rodrigo> racional
+- [X] Gerar Model Card completo (performance, limitações, vieses, cenários de falha). [Ciclo de Vida, Aula 03]
+- [X] Documentar arquitetura de deploy escolhida (batch vs. real-time) + justificativa. [Ciclo de Vida, Aula 04]
 - [ ] Criar plano de monitoramento (métricas, alertas, playbook de resposta). [Ciclo de Vida, Aula 05]
-- [ ] Finalizar README com instruções de setup + execução + arquitetura. [Eng. Software / APIs] <Rodrigo>
+- [X] Finalizar README com instruções de setup + execução + arquitetura. [Eng. Software / APIs] <Rodrigo>
 
 **Entregável**: repositório final + vídeo STAR + (opcional) URL do deploy em nuvem.
 

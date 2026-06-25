@@ -7,8 +7,9 @@ Telco churn CSV with 0.0 and writes the cleaned file back to disk.
 Usage:
     python -m src.data.fix_total_charges
     # or with custom paths:
-    python -m src.data.fix_total_charges --input data/raw/Telco_customer_churn.csv \
-                                          --output data/raw/Telco_customer_churn.csv
+    python -m src.data.fix_total_charges \\
+        --input data/raw/Telco_customer_churn.csv \\
+        --output data/raw/Telco_customer_churn.csv
 """
 
 import argparse
@@ -20,7 +21,12 @@ import pandas as pd
 logging.basicConfig(level=logging.INFO, format="%(levelname)s — %(message)s")
 logger = logging.getLogger(__name__)
 
-DEFAULT_INPUT = Path(__file__).resolve().parents[2] / "data" / "raw" / "Telco_customer_churn.csv"
+DEFAULT_INPUT = (
+    Path(__file__).resolve().parents[2]
+    / "data"
+    / "raw"
+    / "Telco_customer_churn.csv"
+)
 COLUMN = "Total Charges"
 
 
@@ -29,7 +35,10 @@ def fix_total_charges(input_path: Path, output_path: Path) -> None:
     df = pd.read_csv(input_path)
 
     if COLUMN not in df.columns:
-        raise KeyError(f"Column '{COLUMN}' not found. Available columns: {df.columns.tolist()}")
+        raise KeyError(
+            f"Column '{COLUMN}' not found. "
+            f"Available columns: {df.columns.tolist()}"
+        )
 
     # Count blank-space entries before fix
     blank_mask = df[COLUMN].astype(str).str.strip() == ""
@@ -46,9 +55,18 @@ def fix_total_charges(input_path: Path, output_path: Path) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Fix blank Total Charges values in Telco CSV.")
-    parser.add_argument("--input",  type=Path, default=DEFAULT_INPUT, help="Path to input CSV")
-    parser.add_argument("--output", type=Path, default=None,          help="Path to output CSV (defaults to input)")
+    parser = argparse.ArgumentParser(
+        description="Fix blank Total Charges values in Telco CSV."
+    )
+    parser.add_argument(
+        "--input", type=Path, default=DEFAULT_INPUT, help="Path to input CSV"
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=None,
+        help="Path to output CSV (defaults to input)",
+    )
     args = parser.parse_args()
 
     output = args.output or args.input
