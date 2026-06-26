@@ -256,7 +256,7 @@ Temporary Items
 models/*.pkl
 models/*.pt
 models/*.pth
-# models/*.joblib  # kept in git for Lambda deployment
+# models/*.joblib  # Mantido no Git para o uso no deploy do Lambda
 models/*.h5
 models/*.onnx
 models/*.bin
@@ -303,5 +303,3 @@ service_account.json
 # Dependency lock files (optional — uncomment to track for reproducibility)
 # poetry.lock
 # uv.lock
-
-.DS_Store
