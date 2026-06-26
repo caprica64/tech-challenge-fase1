@@ -41,26 +41,30 @@
 
 ## 🏆 Métricas Principais (MLP vs. Baselines)
 
-*(Os valores abaixo serão preenchidos após execução do loop de treinamento e registro no MLflow)*
-
-| Métrica | MLP PyTorch | Regressão Logística | Random Forest | Diferença (MLP vs melhor baseline) |
+| Métrica | MLP PyTorch | Random Forest | Regressão Logística | DummyClassifier |
 | :--- | :---: | :---: | :---: | :---: |
-| **PR AUC** | *[Preencher]* | *[Preencher]* | *[Preencher]* | *[Preencher]* |
-| **F2-Score** | *[Preencher]* | *[Preencher]* | *[Preencher]* | *[Preencher]* |
-| **Recall** | *[Preencher]* | *[Preencher]* | *[Preencher]* | *[Preencher]* |
-| **Precision** | *[Preencher]* | *[Preencher]* | *[Preencher]* | *[Preencher]* |
-| **ROC AUC** | *[Preencher]* | *[Preencher]* | *[Preencher]* | *[Preencher]* |
-| **Accuracy** | *[Preencher]* | *[Preencher]* | *[Preencher]* | *[Preencher]* |
+| **PR AUC** | **0.950** | 0.945 | 0.934 | 0.272 |
+| **ROC AUC** | **0.979** | 0.977 | 0.974 | 0.516 |
+| **Recall** | **0.947** | 0.874 | 0.858 | 0.291 |
+| **Precision** | 0.778 | **0.872** | 0.829 | 0.289 |
+| **F1** | 0.854 | **0.873** | 0.844 | 0.290 |
+| **Accuracy** | 0.914 | **0.933** | 0.916 | 0.622 |
+
+> **Análise:** A MLP obteve o melhor PR-AUC e Recall entre todos os modelos, priorizando a detecção de churners conforme estratégia de negócio. O Random Forest apresentou melhor equilíbrio geral (F1/Precision), sendo uma alternativa para cenários onde o custo de FP é mais relevante.
 
 ---
 
 ## ⚖️ Definição das Faixas de Risco (Trade-off de Custo)
 
-| Faixa de Probabilidade | Classificação de Risco | Ação Direcionada no CRM |
-| :--- | :--- | :--- |
-| **P(churn) ≥ 0.80** | Risco Crítico | Acionamento humano (Ouvidoria/Call Center) focado na preservação do MRR de alto valor. |
-| **0.50 ≤ P(churn) < 0.80** | Risco Alto | Disparo automatizado de ofertas de engajamento (upgrades, benefícios de valor agregado). |
-| **P(churn) < 0.50** | Risco Monitorado | Manutenção nas réguas tradicionais de comunicação e marketing. |
+**Threshold ótimo de custo:** 0.45 (minimiza custo total R$ 4.000)
+
+| Faixa de Probabilidade | Classificação de Risco | Ação Direcionada no CRM | Custo estimado |
+| :--- | :--- | :--- | :--- |
+| **P(churn) ≥ 0.80** | Risco Crítico | Acionamento humano (Ouvidoria/Call Center) focado na preservação do MRR de alto valor. | R$ 7.680 |
+| **0.45 ≤ P(churn) < 0.80** | Risco Alto | Disparo automatizado de ofertas de engajamento (upgrades, benefícios de valor agregado). | **R$ 4.000 (ótimo)** |
+| **P(churn) < 0.45** | Risco Monitorado | Manutenção nas réguas tradicionais de comunicação e marketing. | — |
+
+> O threshold 0.45 equilibra o custo assimétrico: FN (R$100/cliente perdido) vs FP (R$20/oferta desnecessária). Economia de ~R$500 em relação ao threshold padrão 0.5 no dataset de teste.
 
 ---
 
