@@ -38,7 +38,7 @@ Passo a Passo Resumido
 - [X] Model Card documentando limitações e vieses. <Rodrigo>
 - [X] Testes automatizados (≥ 3: smoke test, schema, API). <Allan>
 - [X] Logging estruturado (sem print()). <Albino>
-- [O] Linting com ruff sem erros. <Rodrigo>
+- [X] Linting com ruff sem erros. <Rodrigo>
 
 ## Etapa 1 — Entendimento e Preparação (Disciplinas 01 e 02)
 
