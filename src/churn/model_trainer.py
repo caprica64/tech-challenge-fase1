@@ -7,14 +7,11 @@ import logging
 import numpy as np
 import pandas as pd
 import torch
-from sklearn.metrics import (
-    average_precision_score,
-)
+from sklearn.metrics import average_precision_score
 from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import StandardScaler
 from torch import nn
 from torch.utils.data import DataLoader, TensorDataset
-
 
 logger = logging.getLogger(__name__)
 
@@ -58,11 +55,21 @@ def fit_model(
     epochs: int = 50,
     batch_size: int = 64,
     random_state: int = 42,
+    use_pos_weight: bool = False,
+    patience: int = 10,
 ) -> tuple[ChurnModel, StandardScaler, list[float]]:
-    """Treina a rede neural usando os conjuntos vindos do DataIngestion."""
+    """Treina a rede neural com early stopping e batching.
+
+    Args:
+        patience: Número de épocas sem melhoria na loss
+            antes de parar o treinamento antecipadamente.
+    """
     logger.info(
-        "Iniciando treino do modelo: amostras=%s, features=%s, hidden_layers=%s, "
-        "dropout=%.2f, activation=%s, learning_rate=%s, epochs=%s, batch_size=%s",
+        "Iniciando treino do modelo: amostras=%s, "
+        "features=%s, hidden_layers=%s, "
+        "dropout=%.2f, activation=%s, "
+        "learning_rate=%s, epochs=%s, "
+        "batch_size=%s, use_pos_weight=%s, patience=%s",
         len(X_train),
         X_train.shape[1],
         hidden_layers,
@@ -71,6 +78,8 @@ def fit_model(
         learning_rate,
         epochs,
         batch_size,
+        use_pos_weight,
+        patience,
     )
 
     np.random.seed(random_state)
@@ -81,8 +90,12 @@ def fit_model(
     X_train_scaled = scaler.fit_transform(X_train)
     logger.debug("StandardScaler ajustado no conjunto de treino")
 
-    X_train_tensor = torch.tensor(X_train_scaled, dtype=torch.float32)
-    y_train_tensor = torch.tensor(y_train.to_numpy(), dtype=torch.float32)
+    X_train_tensor = torch.tensor(
+        X_train_scaled, dtype=torch.float32
+    )
+    y_train_tensor = torch.tensor(
+        y_train.to_numpy(), dtype=torch.float32
+    )
 
     train_dataset = TensorDataset(X_train_tensor, y_train_tensor)
     train_loader = DataLoader(
@@ -97,10 +110,18 @@ def fit_model(
         dropout=dropout,
         activation=activation,
     )
-    loss_function = nn.BCEWithLogitsLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+    loss_function = _build_loss_function(
+        y_train_tensor=y_train_tensor,
+        use_pos_weight=use_pos_weight,
+    )
+    optimizer = torch.optim.Adam(
+        model.parameters(), lr=learning_rate
+    )
 
     losses = []
+    best_loss = float("inf")
+    best_state = None
+    epochs_without_improvement = 0
 
     for epoch in range(epochs):
         model.train()
@@ -114,17 +135,58 @@ def fit_model(
             optimizer.step()
             epoch_losses.append(loss.item())
 
-        losses.append(float(np.mean(epoch_losses)))
+        epoch_loss = float(np.mean(epoch_losses))
+        losses.append(epoch_loss)
 
-        if (epoch + 1) == 1 or (epoch + 1) == epochs or (epoch + 1) % 10 == 0:
+        # ── Early stopping ─────────────────────────────────
+        if epoch_loss < best_loss - 1e-4:
+            best_loss = epoch_loss
+            best_state = model.state_dict().copy()
+            epochs_without_improvement = 0
+        else:
+            epochs_without_improvement += 1
+
+        if (
+            (epoch + 1) == 1
+            or (epoch + 1) == epochs
+            or (epoch + 1) % 10 == 0
+            or epochs_without_improvement == patience
+        ):
             logger.info(
-                "Epoca %s/%s finalizada com loss %.6f",
+                "Epoca %s/%s | loss=%.6f | "
+                "best=%.6f | patience=%s/%s",
                 epoch + 1,
                 epochs,
-                losses[-1],
+                epoch_loss,
+                best_loss,
+                epochs_without_improvement,
+                patience,
             )
 
-    logger.info("Treino concluido. Loss final: %.6f", losses[-1])
+        if epochs_without_improvement >= patience:
+            logger.info(
+                "Early stopping na epoca %s — "
+                "sem melhoria por %s epocas.",
+                epoch + 1,
+                patience,
+            )
+            break
+
+    # Restaura os melhores pesos encontrados
+    if best_state is not None:
+        model.load_state_dict(best_state)
+        logger.info(
+            "Pesos restaurados para best_loss=%.6f",
+            best_loss,
+        )
+
+    logger.info(
+        "Treino concluido. Epocas executadas: %s/%s. "
+        "Loss final: %.6f",
+        len(losses),
+        epochs,
+        losses[-1],
+    )
     return model, scaler, losses
 
 
@@ -139,11 +201,13 @@ def cross_validate_model(
     epochs: int = 50,
     batch_size: int = 64,
     random_state: int = 42,
+    use_pos_weight: bool = False,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Executa validacao cruzada estratificada para a rede neural."""
     logger.info(
         "Iniciando validacao cruzada estratificada: amostras=%s, features=%s, "
-        "n_splits=%s, hidden_layers=%s, dropout=%.2f, learning_rate=%s, epochs=%s",
+        "n_splits=%s, hidden_layers=%s, dropout=%.2f, learning_rate=%s, "
+        "epochs=%s, use_pos_weight=%s",
         len(X),
         X.shape[1],
         n_splits,
@@ -151,6 +215,7 @@ def cross_validate_model(
         dropout,
         learning_rate,
         epochs,
+        use_pos_weight,
     )
 
     splitter = StratifiedKFold(
@@ -178,6 +243,7 @@ def cross_validate_model(
             epochs=epochs,
             batch_size=batch_size,
             random_state=random_state + fold,
+            use_pos_weight=use_pos_weight,
         )
 
         probabilities = predict_proba(model=model, scaler=scaler, X=X_valid_fold)
@@ -253,6 +319,30 @@ def _calculate_pr_auc(
     return {
         "pr_auc": average_precision_score(y_true, probabilities),
     }
+
+
+def _build_loss_function(
+    y_train_tensor: torch.Tensor,
+    use_pos_weight: bool,
+) -> nn.BCEWithLogitsLoss:
+    if not use_pos_weight:
+        return nn.BCEWithLogitsLoss()
+
+    positive_count = y_train_tensor.sum()
+    negative_count = len(y_train_tensor) - positive_count
+
+    if positive_count.item() == 0:
+        logger.warning(
+            "use_pos_weight=True foi solicitado, mas nao ha classe positiva no treino."
+        )
+        return nn.BCEWithLogitsLoss()
+
+    pos_weight = negative_count / positive_count
+    logger.info("Usando pos_weight=%.6f no BCEWithLogitsLoss", pos_weight.item())
+
+    return nn.BCEWithLogitsLoss(
+        pos_weight=torch.tensor(pos_weight.item(), dtype=torch.float32)
+    )
 
 
 def _get_activation_layer(activation: str) -> nn.Module:

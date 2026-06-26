@@ -256,7 +256,7 @@ Temporary Items
 models/*.pkl
 models/*.pt
 models/*.pth
-models/*.joblib
+# models/*.joblib  # Mantido no Git para o uso no deploy do Lambda
 models/*.h5
 models/*.onnx
 models/*.bin

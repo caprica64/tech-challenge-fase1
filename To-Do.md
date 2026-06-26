@@ -15,14 +15,14 @@ Passo a Passo Resumido
 
 - [X] Estrutura organizada: src/, data/, models/, tests/, notebooks/, docs/
 - [X] README.md completo descrição do projeto
-- [O] pyproject.toml como single source of truth (dependências, linting, pytest)
+- [X] pyproject.toml como single source of truth (dependências, linting, pytest)
 - [X] Histórico de commits limpo e significativo (não 1 commit gigante)    
 - [X] .gitignore adequado para projetos de ML
 
 ## Video & Deploy
 
 - [ ] Video de 5 minutos
-- [O] Deploy em ambiente de produção
+- [X] Deploy em ambiente de produção
 
 ## Bibliotecas Requeridas
 
@@ -35,9 +35,9 @@ Passo a Passo Resumido
 
 - [X] Seeds fixados para reprodutibilidade.
 - [ ] Validação cruzada estratificada. <Albino>
-- [ ] Model Card documentando limitações e vieses. <Rodrigo>
+- [O] Model Card documentando limitações e vieses. <Rodrigo>
 - [ ] Testes automatizados (≥ 3: smoke test, schema, API). <Allan>
-- [ ] Logging estruturado (sem print()). <Albino>
+- [X] Logging estruturado (sem print()). <Albino>
 - [O] Linting com ruff sem erros. <Rodrigo>
 
 ## Etapa 1 — Entendimento e Preparação (Disciplinas 01 e 02)
@@ -49,7 +49,7 @@ Passo a Passo Resumido
 - [ ] Definir métrica técnica (AUC-ROC, PR-AUC, F1) e métrica de negócio (custo de churn evitado) [Fundamentos, Aula 05]
   - [ ] PR-AUC <<EXPLICAR RACIONAL>> Target 1 <Albino>
 - [X] Treinar baseline com DummyClassifier e Regressão Logística (Scikit-Learn) [Fundamentos, Aulas 01–02]
-- [O] Registrar experimentos no MLflow (parâmetros, métricas, dataset version) [Ciclo de Vida, Aula 02] <Albino>
+- [X] Registrar experimentos no MLflow (parâmetros, métricas, dataset version) [Ciclo de Vida, Aula 02] <Albino>
 
 **Entregável**: notebook de EDA + baselines registrados no MLflow.
 
@@ -58,11 +58,11 @@ Passo a Passo Resumido
 
 **Foco**: Construção, treinamento e avaliação de MLP com PyTorch.
 
-- [ ] Construir MLP em PyTorch: definir arquitetura, função de ativação, loss function. [Fundamentos, Aula 04]
-- [ ] Implementar loop de treinamento com early stopping e batching. [Fundamentos, Aula 04]
-- [ ] Comparar MLP vs. baselines (lineares + árvores) usando ≥ 4 métricas. [Fundamentos, Aula 05]
-- [ ] Analisar trade-off de custo (falso positivo vs. negativo). [Fundamentos, Aula 05]
-- [ ] Registrar todos os experimentos (MLP e ensembles) no MLflow. [Ciclo de Vida, Aula 02]
+- [X] Construir MLP em PyTorch: definir arquitetura, função de ativação, loss function. [Fundamentos, Aula 04]
+- [X] Implementar loop de treinamento com early stopping e batching. [Fundamentos, Aula 04]
+- [X] Comparar MLP vs. baselines (lineares + árvores) usando ≥ 4 métricas. [Fundamentos, Aula 05]
+- [X] Analisar trade-off de custo (falso positivo vs. negativo). [Fundamentos, Aula 05]
+- [X] Registrar todos os experimentos (MLP e ensembles) no MLflow. [Ciclo de Vida, Aula 02]
 
 **Entregável**: tabela comparativa de modelos + MLP treinado + artefatos no MLflow.
 
@@ -71,11 +71,11 @@ Passo a Passo Resumido
 **Foco**: refatoração profissional, API de inferência e pacote reutilizável.
 
 - [X] Refatorar código em módulos (src/) com estrutura limpa. [Eng. Software, Aula 01]
-- [O] Criar pipeline reprodutível (sklearn + transformadores custom). [Eng. Software, Aula 01; Bibliotecas, Aula 02]
-- [O] Escrever testes (pytest): unitários, schema (pandera), smoke test. [Eng. Software, Aula 03]
-- [O] Construir API FastAPI: /predict, /health, validação Pydantic. [APIs, Aulas 01–03]
-- [ ] Adicionar logging estruturado e middleware de latência. [APIs, Aula 04]
-- [O] Configurar pyproject.toml, ruff, Makefile (lint, test, run). [Eng. Software, Aulas 04–05]
+- [X] Criar pipeline reprodutível (sklearn + transformadores custom). [Eng. Software, Aula 01; Bibliotecas, Aula 02]
+- [X] Escrever testes (pytest): unitários, schema (pandera), smoke test. [Eng. Software, Aula 03]
+- [X] Construir API FastAPI: /predict, /health, validação Pydantic. [APIs, Aulas 01–03]
+- [X] Adicionar logging estruturado e middleware de latência. [APIs, Aula 04]
+- [X] Configurar pyproject.toml, ruff, Makefile (lint, test, run). [Eng. Software, Aulas 04–05]
 
 **Entregável**: repositório refatorado + API funcional + testes passando.
 
@@ -83,10 +83,10 @@ Passo a Passo Resumido
 
 **Foco**: consolidação, documentação e vídeo de apresentação.
 
-- [O] Gerar Model Card completo (performance, limitações, vieses, cenários de falha). [Ciclo de Vida, Aula 03]
+- [X] Gerar Model Card completo (performance, limitações, vieses, cenários de falha). [Ciclo de Vida, Aula 03]
 - [X] Documentar arquitetura de deploy escolhida (batch vs. real-time) + justificativa. [Ciclo de Vida, Aula 04]
 - [ ] Criar plano de monitoramento (métricas, alertas, playbook de resposta). [Ciclo de Vida, Aula 05]
-- [ ] Finalizar README com instruções de setup + execução + arquitetura. [Eng. Software / APIs] <Rodrigo>
+- [X] Finalizar README com instruções de setup + execução + arquitetura. [Eng. Software / APIs] <Rodrigo>
 
 **Entregável**: repositório final + vídeo STAR + (opcional) URL do deploy em nuvem.
 

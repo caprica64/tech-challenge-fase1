@@ -9,10 +9,8 @@ import mlflow
 import mlflow.pytorch
 import mlflow.sklearn
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
-
 from model_trainer import ChurnModel
-
+from sklearn.preprocessing import StandardScaler
 
 logger = logging.getLogger(__name__)
 
