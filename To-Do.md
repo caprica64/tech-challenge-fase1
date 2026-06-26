@@ -34,9 +34,9 @@ Passo a Passo Resumido
 ## Boas Práticas Obrigatórias
 
 - [X] Seeds fixados para reprodutibilidade.
-- [ ] Validação cruzada estratificada. <Albino>
+- [X] Validação cruzada estratificada. <Albino>
 - [X] Model Card documentando limitações e vieses. <Rodrigo>
-- [ ] Testes automatizados (≥ 3: smoke test, schema, API). <Allan>
+- [X] Testes automatizados (≥ 3: smoke test, schema, API). <Allan>
 - [X] Logging estruturado (sem print()). <Albino>
 - [O] Linting com ruff sem erros. <Rodrigo>
 
