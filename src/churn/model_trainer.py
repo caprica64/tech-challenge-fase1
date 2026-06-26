@@ -56,12 +56,20 @@ def fit_model(
     batch_size: int = 64,
     random_state: int = 42,
     use_pos_weight: bool = False,
+    patience: int = 10,
 ) -> tuple[ChurnModel, StandardScaler, list[float]]:
-    """Treina a rede neural usando os conjuntos vindos do DataIngestion."""
+    """Treina a rede neural com early stopping e batching.
+
+    Args:
+        patience: Número de épocas sem melhoria na loss
+            antes de parar o treinamento antecipadamente.
+    """
     logger.info(
-        "Iniciando treino do modelo: amostras=%s, features=%s, hidden_layers=%s, "
-        "dropout=%.2f, activation=%s, learning_rate=%s, epochs=%s, batch_size=%s, "
-        "use_pos_weight=%s",
+        "Iniciando treino do modelo: amostras=%s, "
+        "features=%s, hidden_layers=%s, "
+        "dropout=%.2f, activation=%s, "
+        "learning_rate=%s, epochs=%s, "
+        "batch_size=%s, use_pos_weight=%s, patience=%s",
         len(X_train),
         X_train.shape[1],
         hidden_layers,
@@ -71,6 +79,7 @@ def fit_model(
         epochs,
         batch_size,
         use_pos_weight,
+        patience,
     )
 
     np.random.seed(random_state)
@@ -81,8 +90,12 @@ def fit_model(
     X_train_scaled = scaler.fit_transform(X_train)
     logger.debug("StandardScaler ajustado no conjunto de treino")
 
-    X_train_tensor = torch.tensor(X_train_scaled, dtype=torch.float32)
-    y_train_tensor = torch.tensor(y_train.to_numpy(), dtype=torch.float32)
+    X_train_tensor = torch.tensor(
+        X_train_scaled, dtype=torch.float32
+    )
+    y_train_tensor = torch.tensor(
+        y_train.to_numpy(), dtype=torch.float32
+    )
 
     train_dataset = TensorDataset(X_train_tensor, y_train_tensor)
     train_loader = DataLoader(
@@ -101,9 +114,14 @@ def fit_model(
         y_train_tensor=y_train_tensor,
         use_pos_weight=use_pos_weight,
     )
-    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+    optimizer = torch.optim.Adam(
+        model.parameters(), lr=learning_rate
+    )
 
     losses = []
+    best_loss = float("inf")
+    best_state = None
+    epochs_without_improvement = 0
 
     for epoch in range(epochs):
         model.train()
@@ -117,17 +135,58 @@ def fit_model(
             optimizer.step()
             epoch_losses.append(loss.item())
 
-        losses.append(float(np.mean(epoch_losses)))
+        epoch_loss = float(np.mean(epoch_losses))
+        losses.append(epoch_loss)
 
-        if (epoch + 1) == 1 or (epoch + 1) == epochs or (epoch + 1) % 10 == 0:
+        # ── Early stopping ─────────────────────────────────
+        if epoch_loss < best_loss - 1e-4:
+            best_loss = epoch_loss
+            best_state = model.state_dict().copy()
+            epochs_without_improvement = 0
+        else:
+            epochs_without_improvement += 1
+
+        if (
+            (epoch + 1) == 1
+            or (epoch + 1) == epochs
+            or (epoch + 1) % 10 == 0
+            or epochs_without_improvement == patience
+        ):
             logger.info(
-                "Epoca %s/%s finalizada com loss %.6f",
+                "Epoca %s/%s | loss=%.6f | "
+                "best=%.6f | patience=%s/%s",
                 epoch + 1,
                 epochs,
-                losses[-1],
+                epoch_loss,
+                best_loss,
+                epochs_without_improvement,
+                patience,
             )
 
-    logger.info("Treino concluido. Loss final: %.6f", losses[-1])
+        if epochs_without_improvement >= patience:
+            logger.info(
+                "Early stopping na epoca %s — "
+                "sem melhoria por %s epocas.",
+                epoch + 1,
+                patience,
+            )
+            break
+
+    # Restaura os melhores pesos encontrados
+    if best_state is not None:
+        model.load_state_dict(best_state)
+        logger.info(
+            "Pesos restaurados para best_loss=%.6f",
+            best_loss,
+        )
+
+    logger.info(
+        "Treino concluido. Epocas executadas: %s/%s. "
+        "Loss final: %.6f",
+        len(losses),
+        epochs,
+        losses[-1],
+    )
     return model, scaler, losses
 
 

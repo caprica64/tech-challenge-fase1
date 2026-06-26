@@ -22,7 +22,7 @@ Passo a Passo Resumido
 ## Video & Deploy
 
 - [ ] Video de 5 minutos
-- [O] Deploy em ambiente de produção
+- [X] Deploy em ambiente de produção
 
 ## Bibliotecas Requeridas
 
@@ -37,7 +37,7 @@ Passo a Passo Resumido
 - [ ] Validação cruzada estratificada. <Albino>
 - [O] Model Card documentando limitações e vieses. <Rodrigo>
 - [ ] Testes automatizados (≥ 3: smoke test, schema, API). <Allan>
-- [ ] Logging estruturado (sem print()). <Albino>
+- [X] Logging estruturado (sem print()). <Albino>
 - [O] Linting com ruff sem erros. <Rodrigo>
 
 ## Etapa 1 — Entendimento e Preparação (Disciplinas 01 e 02)
@@ -49,7 +49,7 @@ Passo a Passo Resumido
 - [ ] Definir métrica técnica (AUC-ROC, PR-AUC, F1) e métrica de negócio (custo de churn evitado) [Fundamentos, Aula 05]
   - [ ] PR-AUC <<EXPLICAR RACIONAL>> Target 1 <Albino>
 - [X] Treinar baseline com DummyClassifier e Regressão Logística (Scikit-Learn) [Fundamentos, Aulas 01–02]
-- [O] Registrar experimentos no MLflow (parâmetros, métricas, dataset version) [Ciclo de Vida, Aula 02] <Albino>
+- [X] Registrar experimentos no MLflow (parâmetros, métricas, dataset version) [Ciclo de Vida, Aula 02] <Albino>
 
 **Entregável**: notebook de EDA + baselines registrados no MLflow.
 
@@ -58,11 +58,11 @@ Passo a Passo Resumido
 
 **Foco**: Construção, treinamento e avaliação de MLP com PyTorch.
 
-- [ ] Construir MLP em PyTorch: definir arquitetura, função de ativação, loss function. [Fundamentos, Aula 04]
-- [ ] Implementar loop de treinamento com early stopping e batching. [Fundamentos, Aula 04]
-- [ ] Comparar MLP vs. baselines (lineares + árvores) usando ≥ 4 métricas. [Fundamentos, Aula 05]
-- [ ] Analisar trade-off de custo (falso positivo vs. negativo). [Fundamentos, Aula 05]
-- [ ] Registrar todos os experimentos (MLP e ensembles) no MLflow. [Ciclo de Vida, Aula 02]
+- [X] Construir MLP em PyTorch: definir arquitetura, função de ativação, loss function. [Fundamentos, Aula 04]
+- [X] Implementar loop de treinamento com early stopping e batching. [Fundamentos, Aula 04]
+- [X] Comparar MLP vs. baselines (lineares + árvores) usando ≥ 4 métricas. [Fundamentos, Aula 05]
+- [X] Analisar trade-off de custo (falso positivo vs. negativo). [Fundamentos, Aula 05]
+- [X] Registrar todos os experimentos (MLP e ensembles) no MLflow. [Ciclo de Vida, Aula 02]
 
 **Entregável**: tabela comparativa de modelos + MLP treinado + artefatos no MLflow.
 

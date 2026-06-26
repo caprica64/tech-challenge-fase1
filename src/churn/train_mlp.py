@@ -113,6 +113,67 @@ def compute_all_metrics(
     }
 
 
+# ── Análise de custo FP vs FN ─────────────────────────────────────
+# Custo de negócio:
+#   FN (churner não detectado) = perda de MRR ~R$100/cliente
+#   FP (não-churner recebe oferta) = custo de retenção ~R$20/cliente
+COST_FN = 100.0  # custo de perder um cliente
+COST_FP = 20.0   # custo de oferta desnecessária
+
+
+def compute_cost_analysis(
+    y_true: np.ndarray,
+    y_proba: np.ndarray,
+    cost_fn: float = COST_FN,
+    cost_fp: float = COST_FP,
+    thresholds: np.ndarray | None = None,
+) -> pd.DataFrame:
+    """Analisa trade-off de custo para diferentes thresholds.
+
+    Retorna tabela com custo total, FP, FN para cada threshold,
+    permitindo escolher o ponto ótimo de operação.
+    """
+    if thresholds is None:
+        thresholds = np.arange(0.1, 0.95, 0.05)
+
+    results = []
+    for threshold in thresholds:
+        y_pred = (y_proba >= threshold).astype(int)
+        fn = int(((y_true == 1) & (y_pred == 0)).sum())
+        fp = int(((y_true == 0) & (y_pred == 1)).sum())
+        tp = int(((y_true == 1) & (y_pred == 1)).sum())
+        tn = int(((y_true == 0) & (y_pred == 0)).sum())
+
+        total_cost = fn * cost_fn + fp * cost_fp
+        recall = tp / max(tp + fn, 1)
+        precision = tp / max(tp + fp, 1)
+
+        results.append({
+            "threshold": round(threshold, 2),
+            "TP": tp,
+            "FP": fp,
+            "FN": fn,
+            "TN": tn,
+            "recall": round(recall, 4),
+            "precision": round(precision, 4),
+            "cost_FN": fn * cost_fn,
+            "cost_FP": fp * cost_fp,
+            "total_cost": total_cost,
+        })
+
+    return pd.DataFrame(results)
+
+
+def find_optimal_threshold(
+    cost_df: pd.DataFrame,
+) -> dict:
+    """Retorna o threshold que minimiza o custo total."""
+    best_row = cost_df.loc[
+        cost_df["total_cost"].idxmin()
+    ]
+    return best_row.to_dict()
+
+
 # ── Baselines ──────────────────────────────────────────────────────
 def train_baselines(
     X_train: np.ndarray,
@@ -361,7 +422,84 @@ def main() -> None:
         mlflow.log_metric("overfitting_gap_pr_auc", gap)
         logger.info("Overfitting gap (PR-AUC): %.4f", gap)
 
-        # ── 7. Persistência ────────────────────────────────────
+        # ── 7. Análise de trade-off de custo (FP vs FN) ───────
+        logger.info("=" * 60)
+        logger.info(
+            "ANÁLISE DE TRADE-OFF DE CUSTO "
+            "(FN=R$%.0f, FP=R$%.0f)",
+            COST_FN, COST_FP,
+        )
+        logger.info("=" * 60)
+
+        # Probabilidades do MLP no teste
+        y_proba_test = predict_proba(
+            model=mlp_result["model"],
+            scaler=mlp_result["scaler"],
+            X=X_test,
+        )
+
+        cost_df = compute_cost_analysis(
+            y_true=y_test.to_numpy(),
+            y_proba=y_proba_test,
+        )
+        logger.info(
+            "Tabela de custos por threshold:\n%s",
+            cost_df.to_string(index=False),
+        )
+
+        optimal = find_optimal_threshold(cost_df)
+        logger.info(
+            "Threshold ótimo: %.2f | "
+            "Custo total: R$%.0f | "
+            "Recall: %.2f | Precision: %.2f | "
+            "FN: %d | FP: %d",
+            optimal["threshold"],
+            optimal["total_cost"],
+            optimal["recall"],
+            optimal["precision"],
+            optimal["FN"],
+            optimal["FP"],
+        )
+
+        # Comparação: threshold padrão (0.5) vs ótimo
+        default_row = cost_df[
+            cost_df["threshold"] == 0.5
+        ].iloc[0]
+        savings = (
+            default_row["total_cost"] - optimal["total_cost"]
+        )
+        logger.info(
+            "Economia vs threshold 0.5: R$%.0f "
+            "(%.1f%% de redução)",
+            savings,
+            savings / max(default_row["total_cost"], 1) * 100,
+        )
+
+        # Log no MLflow
+        mlflow.log_metric(
+            "optimal_threshold", optimal["threshold"]
+        )
+        mlflow.log_metric(
+            "cost_at_optimal", optimal["total_cost"]
+        )
+        mlflow.log_metric(
+            "cost_at_default_05",
+            default_row["total_cost"],
+        )
+        mlflow.log_metric("cost_savings", savings)
+        mlflow.log_metric(
+            "optimal_recall", optimal["recall"]
+        )
+        mlflow.log_metric(
+            "optimal_precision", optimal["precision"]
+        )
+
+        # Salva tabela de custos
+        cost_path = MODELS_DIR / "cost_analysis.csv"
+        cost_df.to_csv(cost_path, index=False)
+        mlflow.log_artifact(str(cost_path))
+
+        # ── 8. Persistência ────────────────────────────────────
         MODELS_DIR.mkdir(parents=True, exist_ok=True)
 
         # Salva modelo PyTorch

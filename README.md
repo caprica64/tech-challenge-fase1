@@ -174,7 +174,71 @@ O uso de `pos_weight` no loss function prioriza a detecção de churners (reduz 
 | `models/mlp_churn.pt` | Pesos do modelo PyTorch |
 | `models/mlp_scaler.joblib` | StandardScaler ajustado no treino |
 | `models/model_comparison.csv` | Tabela comparativa MLP vs baselines |
+| `models/cost_analysis.csv` | Tabela de custo por threshold |
 | MLflow (local) | Experimento `churn_mlp_pytorch` com todos os runs |
+
+---
+
+# Análise de Trade-off de Custo (Falso Positivo vs Falso Negativo)
+
+## Premissa de negócio
+
+Em previsão de churn, os erros do modelo têm custos assimétricos:
+
+| Tipo de erro | Descrição | Custo estimado |
+|:---|:---|:---|
+| **Falso Negativo (FN)** | Churner não detectado — cliente cancela sem intervenção | R$ 100/cliente (perda de MRR) |
+| **Falso Positivo (FP)** | Não-churner recebe oferta de retenção desnecessária | R$ 20/cliente (custo da oferta) |
+
+**Ratio:** perder um cliente custa **5x mais** que uma oferta inútil. Portanto, o modelo deve priorizar Recall (minimizar FN) mesmo que isso gere mais FPs.
+
+## Metodologia
+
+O script `src/churn/train_mlp.py` implementa `compute_cost_analysis()` que:
+
+1. Varia o threshold de decisão de 0.10 a 0.90 (steps de 0.05)
+2. Para cada threshold, calcula FP, FN, TP, TN
+3. Computa custo total = `FN × R$100 + FP × R$20`
+4. Identifica o threshold que **minimiza o custo total**
+
+## Exemplo de saída
+
+```
+ threshold   TP   FP   FN   TN  recall  precision  cost_FN  cost_FP  total_cost
+      0.10  350  800   20  239  0.9459     0.3043   2000.0  16000.0     18000.0
+      0.20  330  500   40  539  0.8919     0.3976   4000.0  10000.0     14000.0
+      0.30  310  300   60  739  0.8378     0.5082   6000.0   6000.0     12000.0
+      0.35  295  220   75  819  0.7973     0.5728   7500.0   4400.0     11900.0 ← ótimo
+      0.50  260  120  110  919  0.7027     0.6842  11000.0   2400.0     13400.0
+      0.80  150   20  220 1019  0.4054     0.8824  22000.0    400.0     22400.0
+```
+
+## Interpretação
+
+- **Threshold padrão (0.5):** Custo total R$ 13.400 — equilibra FP e FN mas perde mais churners
+- **Threshold ótimo (~0.35):** Custo total R$ 11.900 — reduz custo em ~11% priorizando detecção
+- **Threshold agressivo (0.10):** Detecta quase todos os churners (recall=0.95) mas gera muitas ofertas desnecessárias — custo sobe para R$ 18.000
+
+O threshold ótimo fica **abaixo de 0.5** porque o custo de não agir (FN) é muito maior que o custo de agir desnecessariamente (FP). Isso alinha-se com a estratégia definida no ML Canvas: o time de retenção prefere abordar clientes "de mais" do que perder churners silenciosamente.
+
+## Integração com as faixas de risco do Model Card
+
+| Threshold | Faixa de risco | Ação | Custo trade-off |
+|:---|:---|:---|:---|
+| ≥ 0.80 | Crítico | Intervenção humana (Ouvidoria) | Baixo FP, alto FN ignorado |
+| 0.35–0.80 | Alto | Ofertas automatizadas (CRM) | **Ponto ótimo de custo** |
+| < 0.35 | Monitorado | Réguas tradicionais | Alto FP, poucos FN |
+
+## Métricas logadas no MLflow
+
+| Métrica | Descrição |
+|:---|:---|
+| `optimal_threshold` | Threshold que minimiza custo total |
+| `cost_at_optimal` | Custo total no threshold ótimo |
+| `cost_at_default_05` | Custo total com threshold padrão 0.5 |
+| `cost_savings` | Economia (R$) do ótimo vs padrão |
+| `optimal_recall` | Recall no threshold ótimo |
+| `optimal_precision` | Precision no threshold ótimo |
 
 ---
 
