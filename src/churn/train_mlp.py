@@ -207,13 +207,15 @@ def train_baselines(
         metrics["model"] = name
         results.append(metrics)
 
-        # Log no MLflow
+        # Log no MLflow (excluindo 'model' que é string)
         with mlflow.start_run(
             run_name=name.lower().replace(" ", "_"),
             nested=True,
         ):
             mlflow.log_params({"model": name})
-            mlflow.log_metrics(metrics)
+            mlflow.log_metrics(
+                {k: v for k, v in metrics.items() if k != "model"}
+            )
             mlflow.sklearn.log_model(clf, "model")
 
     return pd.DataFrame(results)
@@ -391,9 +393,11 @@ def main() -> None:
         ):
             mlflow.log_metric("train_loss", loss, step=epoch)
 
-        # Log model
+        # Log model (usa formato pickle clássico)
         mlflow.pytorch.log_model(
-            mlp_result["model"], "mlp_model"
+            mlp_result["model"],
+            "mlp_model",
+            serialization_format="pickle",
         )
 
         # ── 6. Tabela comparativa ─────────────────────────────
