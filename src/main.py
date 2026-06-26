@@ -464,6 +464,12 @@ def build_feature_vector(data: CustomerData) -> pd.DataFrame:
 
 
 # ── Endpoints ──────────────────────────────────────────────────────
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    """Retorna 204 No Content para requisições de favicon."""
+    return JSONResponse(content=None, status_code=204)
+
+
 @app.get("/health")
 def health_check() -> JSONResponse:
     return JSONResponse(

@@ -303,3 +303,5 @@ service_account.json
 # Dependency lock files (optional — uncomment to track for reproducibility)
 # poetry.lock
 # uv.lock
+
+.DS_Store
