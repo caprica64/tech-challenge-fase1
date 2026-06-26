@@ -35,7 +35,7 @@ Passo a Passo Resumido
 
 - [X] Seeds fixados para reprodutibilidade.
 - [ ] Validação cruzada estratificada. <Albino>
-- [O] Model Card documentando limitações e vieses. <Rodrigo>
+- [X] Model Card documentando limitações e vieses. <Rodrigo>
 - [ ] Testes automatizados (≥ 3: smoke test, schema, API). <Allan>
 - [X] Logging estruturado (sem print()). <Albino>
 - [O] Linting com ruff sem erros. <Rodrigo>
@@ -44,10 +44,10 @@ Passo a Passo Resumido
 
 **Foco**: formulação do problema, exploração de dados e construção de baselines.
 
-- [O] Preencher ML Canvas (stakeholders, métricas de negócio, SLOs) [Ciclo de Vida, Aula 01] <Rodrigo>
+- [X] Preencher ML Canvas (stakeholders, métricas de negócio, SLOs) [Ciclo de Vida, Aula 01] <Rodrigo>
 - [X] EDA completa: volume, qualidade, distribuição, data readiness [Ciclo de Vida, Aula 01]
-- [ ] Definir métrica técnica (AUC-ROC, PR-AUC, F1) e métrica de negócio (custo de churn evitado) [Fundamentos, Aula 05]
-  - [ ] PR-AUC <<EXPLICAR RACIONAL>> Target 1 <Albino>
+- [X] Definir métrica técnica (AUC-ROC, PR-AUC, F1) e métrica de negócio (custo de churn evitado) [Fundamentos, Aula 05]
+  - [X] PR-AUC <<EXPLICAR RACIONAL>> Target 1 <Albino>
 - [X] Treinar baseline com DummyClassifier e Regressão Logística (Scikit-Learn) [Fundamentos, Aulas 01–02]
 - [X] Registrar experimentos no MLflow (parâmetros, métricas, dataset version) [Ciclo de Vida, Aula 02] <Albino>
 
@@ -85,7 +85,7 @@ Passo a Passo Resumido
 
 - [X] Gerar Model Card completo (performance, limitações, vieses, cenários de falha). [Ciclo de Vida, Aula 03]
 - [X] Documentar arquitetura de deploy escolhida (batch vs. real-time) + justificativa. [Ciclo de Vida, Aula 04]
-- [ ] Criar plano de monitoramento (métricas, alertas, playbook de resposta). [Ciclo de Vida, Aula 05]
+- [X] Criar plano de monitoramento (métricas, alertas, playbook de resposta). [Ciclo de Vida, Aula 05]
 - [X] Finalizar README com instruções de setup + execução + arquitetura. [Eng. Software / APIs] <Rodrigo>
 
 **Entregável**: repositório final + vídeo STAR + (opcional) URL do deploy em nuvem.
