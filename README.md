@@ -77,6 +77,107 @@ O projeto do desafio é formato pelas seguintes pastas e arquivos:
 - /docs
 - /data
 
+---
+
+# Modelagem com Redes Neurais (MLP PyTorch)
+
+## Visão geral
+
+O módulo `src/churn/train_mlp.py` implementa a construção, treinamento e avaliação de uma rede neural MLP (Multi-Layer Perceptron) com PyTorch para previsão de churn, conforme requisitos da Etapa 2 do projeto.
+
+### Como executar
+
+```bash
+source .venv/bin/activate
+python -m src.churn.train_mlp
+```
+
+## Arquitetura da MLP
+
+```
+Input (n features)
+    │
+    ▼
+Linear(n → 128) → ReLU → Dropout(0.3)
+    │
+    ▼
+Linear(128 → 64) → ReLU → Dropout(0.3)
+    │
+    ▼
+Linear(64 → 32) → ReLU → Dropout(0.3)
+    │
+    ▼
+Linear(32 → 1) → Sigmoid (via BCEWithLogitsLoss)
+    │
+    ▼
+P(churn) ∈ [0, 1]
+```
+
+### Hiperparâmetros
+
+| Parâmetro | Valor | Justificativa |
+|:---|:---|:---|
+| `hidden_layers` | (128, 64, 32) | Redução progressiva de dimensionalidade |
+| `dropout` | 0.3 | Regularização contra overfitting (dataset pequeno) |
+| `activation` | ReLU | Padrão para MLPs — eficiente e sem vanishing gradient |
+| `learning_rate` | 0.001 | Valor padrão do Adam — balanceia velocidade e estabilidade |
+| `epochs` | 100 | Suficiente com early stopping implícito via loss monitoring |
+| `batch_size` | 64 | Equilíbrio entre ruído de gradiente e velocidade |
+| `pos_weight` | ~2.76 | Compensa desbalanceamento 73/27 no BCEWithLogitsLoss |
+
+## Pipeline de execução
+
+| Etapa | Descrição |
+|:---|:---|
+| 1. Carrega dados | CSV pré-processado de `data/pre-processed/` |
+| 2. Split estratificado | 80/20 treino/teste com `stratify=y` |
+| 3. Baselines | DummyClassifier, Logistic Regression, Random Forest |
+| 4. Cross-validation MLP | 5-fold estratificado no conjunto de treino |
+| 5. Treino final MLP | Treino no conjunto completo de treino |
+| 6. Avaliação holdout | Métricas no conjunto de teste reservado |
+| 7. Comparação | Tabela PR-AUC, F1, ROC-AUC, Recall, Precision |
+| 8. MLflow tracking | Params, métricas, loss curve, modelo PyTorch |
+| 9. Persistência | `models/mlp_churn.pt` + `models/mlp_scaler.joblib` |
+
+## Métricas de avaliação (≥ 4)
+
+| Métrica | Propósito |
+|:---|:---|
+| **PR-AUC** | Métrica primária — robusta em datasets desbalanceados |
+| **ROC-AUC** | Capacidade geral de discriminação |
+| **F1-Score** | Equilíbrio precisão/recall |
+| **Recall** | Captura de churners — minimiza falsos negativos |
+| **Precision** | Qualidade das predições positivas |
+| **Accuracy** | Referência geral (menos informativa com desbalanceamento) |
+
+## Análise de overfitting
+
+O script calcula `train_metrics` e `test_metrics` lado a lado. O gap de PR-AUC entre treino e teste é logado no MLflow como `overfitting_gap_pr_auc`.
+
+- Gap < 0.05 → modelo generaliza bem
+- Gap 0.05–0.10 → overfitting leve, aceitável
+- Gap > 0.10 → overfitting severo, reduzir capacidade ou aumentar regularização
+
+## Trade-off de custo (FP vs FN)
+
+| Tipo de erro | Custo de negócio | Consequência |
+|:---|:---|:---|
+| **Falso Negativo** (churner não detectado) | Alto (~R$100/cliente) | Perda de receita recorrente (MRR) |
+| **Falso Positivo** (não-churner recebe oferta) | Baixo (~R$20/cliente) | Custo de oferta de retenção desnecessária |
+
+O uso de `pos_weight` no loss function prioriza a detecção de churners (reduz FN), aceitando mais FPs — alinhado com a estratégia de negócio onde perder um cliente é 5x mais caro que uma oferta desnecessária.
+
+## Artefatos gerados
+
+| Arquivo | Descrição |
+|:---|:---|
+| `models/mlp_churn.pt` | Pesos do modelo PyTorch |
+| `models/mlp_scaler.joblib` | StandardScaler ajustado no treino |
+| `models/model_comparison.csv` | Tabela comparativa MLP vs baselines |
+| MLflow (local) | Experimento `churn_mlp_pytorch` com todos os runs |
+
+---
+
 # Opção do modelo de inferência Real Time v Batch
 
 Para este projeto, **real-time (API)** é a escolha mais adequada. Aqui está o racional:
