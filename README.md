@@ -278,6 +278,86 @@ Cliente/CRM  ──▶  API Gateway  ──▶  Lambda (Docker)  ──▶  Resp
 
 A infraestrutura atual do projeto (Lambda + ECR + GitHub Actions CI/CD) já está 100% orientada para real-time, então é a escolha natural tanto técnica quanto pragmaticamente.
 
+---
+
+# Observabilidade — Logs no CloudWatch
+
+A API emite logs estruturados em JSON a cada request e predição. Esses logs são enviados automaticamente ao CloudWatch Logs pelo Lambda runtime.
+
+## Formato dos logs
+
+**Request (cada chamada HTTP):**
+```json
+{"event": "http_request", "request_id": "a1b2c3d4", "method": "POST", "path": "/predict", "status_code": 200, "latency_ms": 12.34}
+```
+
+**Predição (cada inferência):**
+```json
+{"event": "prediction", "churn_probability": 0.78, "churn_prediction": 1.0, "tenure_months": 2.0, "monthly_charges": 95.0, "model_loaded": true}
+```
+
+**Erro:**
+```json
+{"event": "prediction_error", "error": "...detalhes..."}
+```
+
+**Cold start (inicialização do Lambda):**
+```json
+{"event": "model_loaded", "path": "/var/task/models/best_random_forest.joblib"}
+```
+
+## Queries no CloudWatch Logs Insights
+
+Acesse: **AWS Console → CloudWatch → Logs Insights** → selecione o log group `/aws/lambda/churn-dev`
+
+### Latência média e volume por hora
+```sql
+fields @timestamp, latency_ms
+| filter event = "http_request"
+| stats avg(latency_ms) as avg_ms, p95(latency_ms) as p95_ms, count(*) as requests by bin(1h)
+```
+
+### Distribuição de scores de churn
+```sql
+fields @timestamp, churn_probability
+| filter event = "prediction"
+| stats avg(churn_probability) as media, count(*) as total,
+        sum(churn_prediction) as preditos_churn by bin(1d)
+```
+
+### Taxa de predições positivas (alerta se > 45% ou < 10%)
+```sql
+fields @timestamp, churn_prediction
+| filter event = "prediction"
+| stats sum(churn_prediction) / count(*) * 100 as pct_churn by bin(1h)
+```
+
+### Erros recentes
+```sql
+fields @timestamp, error
+| filter event = "prediction_error"
+| sort @timestamp desc
+| limit 20
+```
+
+### Cold starts (verificar frequência)
+```sql
+fields @timestamp, path
+| filter event = "model_loaded"
+| stats count(*) as cold_starts by bin(1h)
+```
+
+## Headers de resposta
+
+Cada resposta da API inclui headers para debugging client-side:
+
+| Header | Descrição |
+|:---|:---|
+| `X-Request-Id` | ID único da request (8 chars) para correlacionar logs |
+| `X-Latency-Ms` | Tempo de processamento em milissegundos |
+
+---
+
 # Instruções
 
 Esses são os passos para implementar o modelo

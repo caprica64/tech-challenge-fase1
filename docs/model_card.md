@@ -31,6 +31,16 @@
 - **F2-Score:** Critério técnico para calibrar limiares de decisão, priorizando Recall sem degradar severamente a Precisão.
 - **ROC-AUC:** Capacidade geral de discriminação entre classes.
 
+#### Racional de escolha da métrica primária (PR-AUC)
+
+O dataset possui desbalanceamento de 73/27 (não-churn/churn). Em cenários desbalanceados:
+
+- **ROC-AUC** pode ser otimista porque incorpora a taxa de verdadeiros negativos (TN), que é artificialmente alta quando a classe majoritária domina. Um modelo medíocre pode ter ROC-AUC elevado simplesmente por acertar os "não-churners".
+- **Accuracy** é enganosa pelo mesmo motivo — prever "não churn" para todos daria 73% de acurácia.
+- **PR-AUC** foca exclusivamente na classe positiva (churners) e avalia: "quando o modelo diz churn, ele acerta? E dos churners reais, quantos ele encontra?" — exatamente o que importa para o CRM atuar.
+
+Além disso, o custo assimétrico (FN=R$100 vs FP=R$20) reforça a necessidade de uma métrica que penalize pesadamente a não-detecção de churners, o que PR-AUC faz naturalmente ao valorizar recall alto.
+
 ### Métricas de negócio
 
 - **MRR-RP (Monthly Recurring Revenue at Risk Protected):** Cruzamento das probabilidades com `Monthly Charges` para estimar receita recorrente passível de proteção pelas ações de retenção.
